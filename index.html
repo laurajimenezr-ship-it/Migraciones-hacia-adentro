@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Migraciones hacia adentro</title>
+<meta name="description" content="Ensayo digital sobre desplazamiento, formación y mirada en el cine indígena contemporáneo: Keratuma (Mileidy Domicó) y Luis Tróchez Tunubalá.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="hud" aria-hidden="true"><div class="tc" id="tc">00:00:00:00</div><div class="st" id="st">Pantalla inicial</div></div>
+<nav class="rail" aria-label="Estaciones del recorrido">
+  <a href="#cineastas" data-s="cineastas"><i></i><span>Territorio</span></a>
+  <a href="#ciudad" data-s="ciudad"><i></i><span>Ciudad</span></a>
+  <a href="#formacion" data-s="formacion"><i></i><span>Formación</span></a>
+  <a href="#yo" data-s="yo"><i></i><span>Yo · memoria</span></a>
+  <a href="#filmar" data-s="filmar"><i></i><span>Filmar</span></a>
+  <a href="#peliculas" data-s="peliculas"><i></i><span>Películas</span></a>
+  <a href="#muro" data-s="muro"><i></i><span>Muro vivo</span></a>
+</nav>
+
+<!-- 0 · PANTALLA INICIAL -->
+<header id="inicio" data-st="Pantalla inicial">
+  <div class="frames" aria-hidden="true">
+    <div class="frame a"><div class="cap">[fotograma · película de Keratuma]</div></div>
+    <div class="frame b"><div class="cap">[fotograma · película de Luis Tróchez]</div></div>
+  </div>
+  <canvas class="grain" id="grain" aria-hidden="true"></canvas>
+  <div class="inicio-in">
+    <span class="label" style="color:var(--muted)">Ensayo digital · cine indígena contemporáneo</span>
+    <h1>Migraciones<em>hacia adentro</em></h1>
+    <p>Desplazamiento, formación y mirada en dos películas y dos cineastas.</p>
+    <div class="voz" id="voz" aria-live="polite"></div>
+    <a class="btn" href="#cineastas">Ingresar ↓</a>
+  </div>
+</header>
+
+<main id="descenso">
+  <svg id="hilos" aria-hidden="true"></svg>
+
+  <!-- 1 · CINEASTAS / TERRITORIO -->
+  <section class="sec claro" id="cineastas" data-st="Territorio">
+    <div class="wrap">
+      <div class="eyebrow label"><b>I</b><span>Dos cineastas, dos salidas</span></div>
+      <h2>No empieza en el territorio.<br>Pero va hacia allá.</h2>
+      <p class="prose">Dos trayectorias que salen de lugares distintos y por razones distintas. Una por el conflicto armado, otra buscando recursos. Elige una puerta.</p>
+      <div class="duo">
+        <article class="puerta a" id="puertaA">
+          <div class="ciudad label"><span>Medellín</span><span style="color:var(--hiloA)">hilo I</span></div>
+          <h3>Keratuma<small>Mileidy Domicó</small></h3>
+          <span class="tipo">Desplazamiento · conflicto</span>
+          <div class="frag" data-quien="a" hidden></div>
+          <button class="abrir" aria-expanded="false">Entrar donde ella →</button>
+        </article>
+        <article class="puerta b" id="puertaB">
+          <div class="ciudad label"><span>Cali</span><span style="color:#3d7268">hilo II</span></div>
+          <h3>Luis Tróchez Tunubalá<small>Misak</small></h3>
+          <span class="tipo">Migración · búsqueda de recursos</span>
+          <div class="frag" data-quien="b" hidden></div>
+          <button class="abrir" aria-expanded="false">Entrar donde él →</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · CIUDAD -->
+  <section class="sec claro" id="ciudad" data-st="Ciudad">
+    <div class="wrap">
+      <div class="eyebrow label"><b>II</b><span>La ciudad</span></div>
+      <p class="big">Ella llega desplazada. Él llega a buscar. La ciudad recibe a los dos de manera distinta.</p>
+      <p class="note">Aquí van imágenes de Medellín y de Cali: calles, transporte, cuartos alquilados. Que el espectador sienta la distancia antes de leerla.</p>
+    </div>
+  </section>
+
+  <div class="gap"></div>
+
+  <!-- 3 · FORMACIÓN / CANIBALIZACIÓN -->
+  <section class="sec" id="formacion" data-st="Formación">
+    <div class="wrap">
+      <div class="eyebrow label"><b>III</b><span>Canibalización del dispositivo audiovisual</span></div>
+      <h2>El encuentro con el cine</h2>
+      <p class="prose">Aquí los dos caminos convergen. El cine llega a través de instituciones occidentales, las universidades. De ese encuentro surgen relaciones entre lo propio y lo ajeno: la formación cinematográfica enseña una forma de ver y de representar, y esa forma se devora y se transforma.</p>
+      <div class="cruce">
+        <div><span class="label" style="color:var(--hiloA)">Lo propio</span><br>lengua, comunidad, memoria</div>
+        <div class="c">universidad</div>
+        <div><span class="label" style="color:var(--hiloB)">Lo ajeno</span><br>gramática del cine, encuadre, montaje</div>
+      </div>
+      <div class="gap"></div>
+      <p class="big">Sobre todo aparece el cine de lo real en primera persona: sujetos colectivos que se piensan en singular.</p>
+      <p class="susurro" style="margin-top:3rem">Y en ese punto deciden mirar hacia dentro.</p>
+    </div>
+  </section>
+
+  <!-- 4 · YO -->
+  <section class="sec" id="yo" data-st="Yo · memoria">
+    <div class="wrap">
+      <div class="eyebrow label"><b>IV</b><span>Yo</span></div>
+      <div class="yo-grid">
+        <div>
+          <h2>Películas encarnadas</h2>
+          <p class="prose">La migración hacia el fuero interno produce películas en primera persona. En el centro está la voz. Alrededor, lo que la voz atraviesa. Toca un nodo para ver con qué se relaciona.</p>
+          <div class="lectura" id="lectura" aria-live="polite">
+            <h3>Voz</h3>
+            <p>El punto desde donde se enuncia. Todo lo demás pasa por aquí.</p>
+          </div>
+        </div>
+        <div class="diagrama"><svg id="diag" viewBox="-300 -300 600 600" role="img" aria-label="Diagrama relacional de conceptos alrededor de la voz"></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · FILMAR -->
+  <section class="sec" id="filmar" data-st="Filmar">
+    <div class="wrap">
+      <div class="eyebrow label"><b>V</b><span>Filmar sobre la experiencia</span></div>
+      <h2>Ensayar. Reterritorializar.</h2>
+      <p class="prose">Pequeños fragmentos. Los recursos estéticos que vuelven cine una vida: planos, modulación de la voz, el tiempo de la imagen cotidiana.</p>
+      <div class="perfo" aria-hidden="true"></div>
+      <div class="contactos" id="contactos"></div>
+      <div class="perfo" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- 6 · PREGUNTA -->
+  <section class="sec" id="pregunta" data-st="Pregunta">
+    <div class="wrap">
+      <p class="big">Qué significa filmar para volver a un lugar del que se tuvo que salir</p>
+      <p class="note" style="display:inline-block;text-align:left">Pregunta provisional. Aquí se abre la pregunta del ensayo.</p>
+    </div>
+  </section>
+
+  <!-- 7 · PELÍCULAS -->
+  <section class="sec" id="peliculas" data-st="Películas">
+    <div class="wrap">
+      <div class="eyebrow label"><b>VI</b><span>Películas para reterritorializar</span></div>
+      <h2>La sala</h2>
+      <p class="prose">Cada película abre tres puertas.</p>
+      <div class="sala">
+        <article class="peli a" data-peli="a">
+          <div class="pantalla"><div class="t"><span class="label">Keratuma · año</span><h3>[Título de la película]</h3></div></div>
+          <div class="puertas" role="group" aria-label="Puertas de la película de Keratuma">
+            <button data-p="ver" aria-pressed="true">Ver</button>
+            <button data-p="escuchar" aria-pressed="false">Escuchar</button>
+            <button data-p="viaje" aria-pressed="false">Seguir el viaje</button>
+          </div>
+          <div class="panel" aria-live="polite"></div>
+        </article>
+        <article class="peli b" data-peli="b">
+          <div class="pantalla"><div class="t"><span class="label">Luis Tróchez Tunubalá · año</span><h3>[Título de la película]</h3></div></div>
+          <div class="puertas" role="group" aria-label="Puertas de la película de Luis Tróchez Tunubalá">
+            <button data-p="ver" aria-pressed="true">Ver</button>
+            <button data-p="escuchar" aria-pressed="false">Escuchar</button>
+            <button data-p="viaje" aria-pressed="false">Seguir el viaje</button>
+          </div>
+          <div class="panel" aria-live="polite"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 8 · MURO VIVO -->
+<section class="sec" id="muro" data-st="Muro vivo">
+  <div class="wrap">
+    <div class="eyebrow label"><b>VII</b><span>Muro vivo</span></div>
+    <h2>Y tú, ¿hacia dónde migras?</h2>
+    <p class="prose">Deja una reflexión. Queda visible para todas las personas que recorran el ensayo. Para escribir necesitas una cuenta de GitHub.</p>
+    <div class="muro-grid">
+      <div>
+        <p class="label" style="color:var(--muted)">Puedes responder a</p>
+        <ul class="preguntas" id="preguntas"></ul>
+      </div>
+      <div>
+        <div class="giscus"></div>
+        <div class="vacio" id="vacio" hidden>El muro todavía no está conectado. Sigue los pasos de «Activar el muro vivo» en el README.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>Migraciones hacia adentro. Prototipo de ensayo digital sobre el cine de Keratuma (Mileidy Domicó) y Luis Tróchez Tunubalá.<br>
+  <span class="label">El ensayo como la forma que piensa · Josep M. Catalá</span></p>
+</footer>
+
+<!-- Primero el contenido (textos editables), luego la lógica -->
+<script src="contenido.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
