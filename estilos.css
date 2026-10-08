@@ -20,6 +20,8 @@
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important} /* los elementos con hidden quedan ocultos (puertas, botón de sonido, avisos) */
+img{max-width:100%}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--noche);color:var(--ink-dark);font-family:var(--body);font-size:1.08rem;line-height:1.6;-webkit-font-smoothing:antialiased}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
