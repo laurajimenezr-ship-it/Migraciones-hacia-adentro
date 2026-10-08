@@ -181,8 +181,20 @@ form.dejar textarea{min-height:8rem;resize:vertical}
 footer{padding-block:4rem 5rem;color:var(--muted);font-size:.9rem}
 
 /* muro con giscus */
-.preguntas{list-style:none;padding:0;margin:.8rem 0 0;display:grid;gap:10px}
-.preguntas li{font-family:var(--display);font-size:1.25rem;line-height:1.25;padding:.9rem 1rem;background:#17151d;border-top:2px solid var(--luz)}
-.preguntas li:nth-child(3n+2){border-color:var(--hiloA)}
-.preguntas li:nth-child(3n){border-color:var(--hiloB)}
 .giscus{min-width:0}
+
+/* sonido de entrada */
+.acciones{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.btn.ghost[aria-pressed="true"]{color:var(--luz);opacity:1}
+
+/* video y audio de las películas */
+.pantalla iframe,.pantalla video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:3}
+.panel audio{width:100%;margin-top:.4rem;color-scheme:dark}
+.panel .galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),1fr));gap:6px;margin-top:.5rem}
+.panel .galeria img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+
+/* muro: preguntas como pestañas */
+.preguntas{display:grid;gap:10px;margin-top:.8rem}
+.preguntas button{text-align:left;cursor:pointer;font-family:var(--display);font-size:1.2rem;line-height:1.25;padding:.9rem 1rem;background:#17151d;border:0;border-top:2px solid rgba(236,231,223,.2);opacity:.65;transition:opacity .2s,border-color .2s}
+.preguntas button:hover{opacity:.9}
+.preguntas button[aria-selected="true"]{opacity:1;border-color:var(--luz)}

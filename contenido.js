@@ -8,6 +8,11 @@
 
 window.CONTENIDO = {
 
+  /* Sonido de la pantalla inicial. Sube el archivo .mp3 a assets/audio/ y escribe
+     su ruta aquí, por ejemplo: 'assets/audio/inicio.mp3'.
+     Si lo dejas vacío, no aparece el botón de sonido. */
+  sonidoInicio: '',
+
   /* Frases que van rotando en la pantalla inicial (fragmentos de voz) */
   frasesInicio: [
     '[voz · fragmento de la película de Keratuma]',
@@ -60,13 +65,20 @@ window.CONTENIDO = {
   ],
 
   /* Las dos películas y sus tres puertas.
-     En "enlaces" puedes poner { texto: 'Ver en Vimeo', url: 'https://...' } */
+     video:    enlace de YouTube o Vimeo (se reproduce dentro de la pantalla al tocar «Ver»).
+               ej. 'https://www.youtube.com/watch?v=XXXX' o 'https://vimeo.com/123456'
+     imagenes: fotogramas en assets/img/, ej. ['assets/img/keratuma-1.jpg', 'assets/img/keratuma-2.jpg']
+     audio:    voz del cineasta en assets/audio/, ej. 'assets/audio/keratuma-voz.mp3'
+     enlaces:  otros recursos, ej. [{ texto: 'Entrevista completa', url: 'https://...' }] */
   peliculas: {
     a: {
       titulo: '[Título de la película]',
       linea: 'Keratuma · año',
       ver: '[Fragmentos de la película: 3 o 4 clips cortos o fotogramas.]',
       escuchar: '[La voz de la cineasta: entrevista, voz en off, fragmento de lengua propia.]',
+      video: '',
+      imagenes: [],
+      audio: '',
       enlaces: [],
       viaje: ['Territorio', 'Medellín', 'Formación', 'Memoria', 'Película']
     },
@@ -75,16 +87,22 @@ window.CONTENIDO = {
       linea: 'Luis Tróchez Tunubalá · año',
       ver: '[Fragmentos de la película: 3 o 4 clips cortos o fotogramas.]',
       escuchar: '[La voz del cineasta: entrevista, voz en off, fragmento de lengua propia.]',
+      video: '',
+      imagenes: [],
+      audio: '',
       enlaces: [],
       viaje: ['Territorio', 'Cali', 'Formación', 'Memoria', 'Película']
     }
   },
 
-  /* Preguntas del muro vivo */
+  /* Preguntas del muro vivo. Cada pregunta tiene su propio hilo de reflexiones
+     (una discusión distinta en GitHub). Si cambias el texto de una pregunta que ya
+     tiene respuestas, esas respuestas quedan en el hilo viejo: mejor agrega una nueva. */
   preguntasMuro: [
     '¿Qué lugar llevas contigo aunque ya no estés ahí?',
     '¿Qué aprendiste a mirar de otra manera?',
-    '¿Qué filmarías de tu propia historia?'
+    '¿Qué filmarías de tu propia historia?',
+    'Reflexión libre'
   ],
 
   /* Muro vivo con giscus (comentarios guardados en GitHub Discussions).

@@ -34,7 +34,8 @@
     <h1>Migraciones<em>hacia adentro</em></h1>
     <p>Desplazamiento, formación y mirada en dos películas y dos cineastas.</p>
     <div class="voz" id="voz" aria-live="polite"></div>
-    <a class="btn" href="#cineastas">Ingresar ↓</a>
+    <div class="acciones"><a class="btn" href="#cineastas">Ingresar ↓</a><button class="btn ghost" id="sonido" type="button" hidden aria-pressed="false">♪ Activar sonido</button></div>
+    <audio id="audioInicio" loop preload="none"></audio>
   </div>
 </header>
 
@@ -170,8 +171,8 @@
     <p class="prose">Deja una reflexión. Queda visible para todas las personas que recorran el ensayo. Para escribir necesitas una cuenta de GitHub.</p>
     <div class="muro-grid">
       <div>
-        <p class="label" style="color:var(--muted)">Puedes responder a</p>
-        <ul class="preguntas" id="preguntas"></ul>
+        <p class="label" style="color:var(--muted)">Elige una pregunta</p>
+        <div class="preguntas" id="preguntas" role="tablist" aria-label="Preguntas del muro"></div>
       </div>
       <div>
         <div class="giscus"></div>

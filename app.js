@@ -20,6 +20,15 @@
   let fi = 0; const voz = $('#voz'); voz.textContent = C.frasesInicio[0] || '';
   if (!reduce && C.frasesInicio.length > 1) setInterval(() => { fi = (fi + 1) % C.frasesInicio.length; voz.textContent = C.frasesInicio[fi]; }, 3200);
 
+  /* ---- sonido de la pantalla inicial ---- */
+  if (C.sonidoInicio) {
+    const btn = $('#sonido'), au = $('#audioInicio'); au.src = C.sonidoInicio; btn.hidden = false;
+    btn.addEventListener('click', () => {
+      if (au.paused) { au.play().then(() => { btn.setAttribute('aria-pressed', 'true'); btn.textContent = '♪ Silenciar'; }).catch(() => {}); }
+      else { au.pause(); btn.setAttribute('aria-pressed', 'false'); btn.textContent = '♪ Activar sonido'; }
+    });
+  }
+
   /* ---- puertas de cineastas ---- */
   $$('.frag').forEach(f => { f.innerHTML = (C.fragmentos[f.dataset.quien] || []).map(t => `<p>${esc(t)}</p>`).join(''); });
   $$('.puerta').forEach(p => {
@@ -73,16 +82,41 @@
   sel('Voz');
 
   /* ---- películas: tres puertas ---- */
+  function embed(url) {
+    if (!url) return '';
+    let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+    if (m) return `https://www.youtube-nocookie.com/embed/${m[1]}?autoplay=1&rel=0`;
+    m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (m) return `https://player.vimeo.com/video/${m[1]}?autoplay=1`;
+    return url; // archivo de video directo (.mp4)
+  }
   $$('.peli').forEach(art => {
     const d = C.peliculas[art.dataset.peli]; if (!d) return;
-    art.querySelector('.pantalla h3').textContent = d.titulo;
-    art.querySelector('.pantalla .label').textContent = d.linea;
+    const pantalla = art.querySelector('.pantalla');
+    pantalla.querySelector('h3').textContent = d.titulo;
+    pantalla.querySelector('.label').textContent = d.linea;
     const panel = art.querySelector('.panel'), bs = art.querySelectorAll('.puertas button');
     const links = (d.enlaces || []).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texto)} ↗</a>`).join(' · ');
+    function quitarVideo() { pantalla.querySelectorAll('iframe,video').forEach(v => v.remove()); }
     function show(p) {
       bs.forEach(b => b.setAttribute('aria-pressed', b.dataset.p === p));
-      if (p === 'viaje') panel.innerHTML = `<p>La identidad entremedios.</p><div class="viaje">${d.viaje.map(s => `<span>${esc(s)}</span>`).join('<i>→</i>')}</div>`;
-      else panel.innerHTML = `<p>${esc(d[p])}</p>` + (p === 'escuchar' && links ? `<p class="label">${links}</p>` : '');
+      if (p !== 'ver') quitarVideo();
+      if (p === 'viaje') {
+        panel.innerHTML = `<p>La identidad entremedios.</p><div class="viaje">${d.viaje.map(s => `<span>${esc(s)}</span>`).join('<i>→</i>')}</div>`;
+      } else if (p === 'ver') {
+        const imgs = (d.imagenes || []).map(src => `<img src="${esc(src)}" alt="Fotograma de ${esc(d.titulo)}" loading="lazy">`).join('');
+        panel.innerHTML = `<p>${esc(d.ver)}</p>` + (d.video ? `<button class="btn" type="button" data-play>▶ Reproducir fragmento</button>` : '') + (imgs ? `<div class="galeria">${imgs}</div>` : '');
+        const play = panel.querySelector('[data-play]');
+        if (play) play.addEventListener('click', () => {
+          quitarVideo(); const src = embed(d.video);
+          const v = /\.(mp4|webm)(\?|$)/i.test(src) ? Object.assign(document.createElement('video'), { src, controls: true, autoplay: true })
+            : Object.assign(document.createElement('iframe'), { src, allow: 'autoplay; fullscreen; picture-in-picture', title: d.titulo });
+          if (v.tagName === 'IFRAME') v.setAttribute('allowfullscreen', '');
+          pantalla.append(v);
+        });
+      } else {
+        panel.innerHTML = `<p>${esc(d.escuchar)}</p>` + (d.audio ? `<audio controls preload="none" src="${esc(d.audio)}"></audio>` : '') + (links ? `<p class="label">${links}</p>` : '');
+      }
     }
     bs.forEach(b => b.addEventListener('click', () => show(b.dataset.p))); show('ver');
   });
@@ -136,15 +170,24 @@
   layoutHilos();
   if (document.fonts) document.fonts.ready.then(layoutHilos);
 
-  /* ---- muro vivo con giscus ---- */
-  $('#preguntas').innerHTML = C.preguntasMuro.map(p => `<li>${esc(p)}</li>`).join('');
-  const g = C.giscus || {};
-  if (g.repo && g.repoId && g.category && g.categoryId) {
+  /* ---- muro vivo con giscus: una discusión por pregunta ---- */
+  const g = C.giscus || {}, tabs = $('#preguntas');
+  const termino = q => 'Muro · ' + q;
+  let actual = C.preguntasMuro[0];
+  tabs.innerHTML = C.preguntasMuro.map((q, i) => `<button type="button" role="tab" aria-selected="${i === 0}">${esc(q)}</button>`).join('');
+  const listo = g.repo && g.repoId && g.category && g.categoryId;
+  tabs.querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => {
+    actual = C.preguntasMuro[i];
+    tabs.querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b));
+    const fr = document.querySelector('iframe.giscus-frame');
+    if (fr) fr.contentWindow.postMessage({ giscus: { setConfig: { term: termino(actual) } } }, 'https://giscus.app');
+  }));
+  if (listo) {
     const s = document.createElement('script');
     s.src = 'https://giscus.app/client.js'; s.async = true; s.crossOrigin = 'anonymous';
     Object.entries({
       'data-repo': g.repo, 'data-repo-id': g.repoId, 'data-category': g.category, 'data-category-id': g.categoryId,
-      'data-mapping': 'specific', 'data-term': 'Muro vivo', 'data-strict': '1', 'data-reactions-enabled': '1',
+      'data-mapping': 'specific', 'data-term': termino(actual), 'data-strict': '1', 'data-reactions-enabled': '1',
       'data-emit-metadata': '0', 'data-input-position': 'top', 'data-theme': 'transparent_dark', 'data-lang': 'es', 'data-loading': 'lazy'
     }).forEach(([k, v]) => s.setAttribute(k, v));
     $('.giscus').append(s);
