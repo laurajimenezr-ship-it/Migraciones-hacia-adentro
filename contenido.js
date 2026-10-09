@@ -11,7 +11,7 @@ window.CONTENIDO = {
   /* Sonido de la pantalla inicial. Sube el archivo .mp3 a assets/audio/ y escribe
      su ruta aquí, por ejemplo: 'assets/audio/inicio.mp3'.
      Si lo dejas vacío, no aparece el botón de sonido. */
-  sonidoInicio: '',
+  sonidoInicio: 'SonidoInicio.mp3',
 
   /* Frases que van rotando en la pantalla inicial (fragmentos de voz) */
   frasesInicio: [
