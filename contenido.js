@@ -109,9 +109,9 @@ window.CONTENIDO = {
      Copia estos cuatro valores desde https://giscus.app (ver README).
      Mientras estén vacíos, el muro muestra un aviso. */
   giscus: {
-    repo: '',          // ej. 'tu-usuario/migraciones-hacia-adentro'
-    repoId: '',        // ej. 'R_kgDO...'
-    category: '',      // ej. 'Muro vivo'
-    categoryId: ''     // ej. 'DIC_kwDO...'
+    repo: 'laurajimenezr-ship-it/Migraciones-hacia-adentro',
+    repoId: 'R_kgDOVAP_zg',
+    category: 'Muro Vivo',
+    categoryId: 'DIC_kwDOVAP_zs4DHa-J'
   }
 };
