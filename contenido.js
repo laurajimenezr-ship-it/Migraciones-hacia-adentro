@@ -28,7 +28,7 @@ window.CONTENIDO = {
       '[Fragmento 3: la llegada a Medellín.]'
     ],
     b: [ // Luis Tróchez Tunubalá
-      '[Fragmento biográfico 1: el territorio de origen y la decisión de salir.]',
+      'Indígena del pueblo Misak del municipio de Silvia Cauca. Comunicador social y periodista. Licenciado en Lenguas Extranjeras (inglés y francés) de la Universidad del Valle',
       '[Fragmento 2: imágenes de Cali. La ciudad como lugar de trabajo y estudio.]',
       '[Fragmento 3: lo que se mantiene del territorio en la ciudad.]'
     ]
