@@ -89,7 +89,7 @@ window.CONTENIDO = {
       linea: 'Luis Tróchez Tunubalá · año',
       ver: '[Fragmentos de la película: 3 o 4 clips cortos o fotogramas.]',
       escuchar: '[La voz del cineasta: entrevista, voz en off, fragmento de lengua propia.]',
-      video: '',
+      video: 'https://www.youtube.com/watch?v=96Nj8GM00tg&t=2s',
       imagenes: [],
       audio: '',
       enlaces: [],
