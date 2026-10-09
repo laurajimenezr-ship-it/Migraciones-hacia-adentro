@@ -23,7 +23,7 @@ window.CONTENIDO = {
   /* Fragmentos biográficos que aparecen al "entrar donde" cada cineasta */
   fragmentos: {
     a: [ // Keratuma · Mileidy Domicó
-      '[Fragmento biográfico 1: el territorio de origen, intervenido con una imagen o una frase de su propia voz.]',
+      'Mutatá-Antioquia. Nació siendo tejedora entre las selvas del Urabá',
       '[Fragmento 2: la salida forzada. Qué se lleva, qué se queda.]',
       '[Fragmento 3: la llegada a Medellín.]'
     ],
