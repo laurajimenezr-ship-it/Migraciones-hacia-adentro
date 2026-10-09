@@ -82,13 +82,24 @@
   sel('Voz');
 
   /* ---- películas: tres puertas ---- */
-  function embed(url) {
+  // Convierte "1:23", "1:02:03", "83" o 83 en segundos
+  function seg(v) {
+    if (v === undefined || v === null || v === '') return 0;
+    if (typeof v === 'number') return Math.max(0, Math.floor(v));
+    const t = String(v).trim().match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
+    if (t && (t[1] || t[2])) return (+t[1] || 0) * 3600 + (+t[2] || 0) * 60 + (+t[3] || 0);
+    return String(v).split(':').reduce((acc, n) => acc * 60 + (parseInt(n, 10) || 0), 0);
+  }
+  function embed(url, inicio, fin) {
     if (!url) return '';
-    let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
-    if (m) return `https://www.youtube-nocookie.com/embed/${m[1]}?autoplay=1&rel=0`;
+    let ini = seg(inicio), end = seg(fin);
+    const tq = url.match(/[?&#](?:t|start)=([\dhms:]+)/);
+    if (!ini && tq) ini = seg(tq[1]);
+    let m = url.match(/(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/(?:embed|shorts|live)\/)([\w-]{6,})/);
+    if (m) return `https://www.youtube-nocookie.com/embed/${m[1]}?autoplay=1&rel=0` + (ini ? `&start=${ini}` : '') + (end ? `&end=${end}` : '');
     m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-    if (m) return `https://player.vimeo.com/video/${m[1]}?autoplay=1`;
-    return url; // archivo de video directo (.mp4)
+    if (m) return `https://player.vimeo.com/video/${m[1]}?autoplay=1` + (ini ? `#t=${ini}s` : '');
+    return url + (ini || end ? `#t=${ini}${end ? ',' + end : ''}` : ''); // archivo .mp4 directo
   }
   $$('.peli').forEach(art => {
     const d = C.peliculas[art.dataset.peli]; if (!d) return;
@@ -108,8 +119,8 @@
         panel.innerHTML = `<p>${esc(d.ver)}</p>` + (d.video ? `<button class="btn" type="button" data-play>▶ Reproducir fragmento</button>` : '') + (imgs ? `<div class="galeria">${imgs}</div>` : '');
         const play = panel.querySelector('[data-play]');
         if (play) play.addEventListener('click', () => {
-          quitarVideo(); const src = embed(d.video);
-          const v = /\.(mp4|webm)(\?|$)/i.test(src) ? Object.assign(document.createElement('video'), { src, controls: true, autoplay: true })
+          quitarVideo(); const src = embed(d.video, d.videoInicio, d.videoFin);
+          const v = /\.(mp4|webm)(\?|#|$)/i.test(src) ? Object.assign(document.createElement('video'), { src, controls: true, autoplay: true })
             : Object.assign(document.createElement('iframe'), { src, allow: 'autoplay; fullscreen; picture-in-picture', title: d.titulo });
           if (v.tagName === 'IFRAME') v.setAttribute('allowfullscreen', '');
           pantalla.append(v);
