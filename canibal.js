@@ -52,6 +52,14 @@ let ultimo = null, ultimoDesde = 0;
 let fin = false, finDesde = 0;
 let grano;
 
+// ---------- Sonido ----------
+const ESCALA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26]; // pentatónica: cualquier combinación suena bien
+const BASE = 220;        // nota más grave (Hz); los parlantes del celular casi no suenan por debajo de 200
+const VOLUMEN = 0.18;    // volumen general (0 a 1)
+let audio = null;        // el motor de sonido del navegador; se crea con el primer toque
+let desbloqueado = false;
+let silencio = false;    // true si la persona apagó el sonido
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   grano = crearGrano();
@@ -191,6 +199,8 @@ function actualizarFragmento(f) {
       f.estado = 'devorando';
       f.t = 0;
       f.x0 = f.x; f.y0 = f.y; f.a0 = f.ang;
+      f.nota = frags.filter(g => g.estado === 'digerido').length; // cada bocado, una nota más aguda
+      if (sonidoListo()) { chasquido(); ablandar(f.nota); }
     }
   } else if (f.estado === 'devorando') {
     f.t = min(1, f.t + deltaTime / 1000 / DIGESTION);
@@ -199,7 +209,12 @@ function actualizarFragmento(f) {
       hebras.push(nuevaHebra(colorDe(f.d)));   // lo devorado ya es parte del tejido
       ultimo = f.d;
       ultimoDesde = millis();
-      if (frags.every(g => g.estado === 'digerido')) { fin = true; finDesde = millis(); }
+      if (sonidoListo()) hilo(f.nota, f.d.quien);
+      if (frags.every(g => g.estado === 'digerido')) {
+        fin = true;
+        finDesde = millis();
+        if (sonidoListo()) acordeFinal();
+      }
     }
   }
 }
@@ -276,13 +291,14 @@ function dibujarDigestion(f) {
   const ajeno = f.d.ajeno.toUpperCase();
   const aAjeno = 255 * constrain(1.3 - e * 1.5, 0, 1);
   const yA = py - max(R, h * (1 - e) / 2) - 14;
+  const tw = textWidth(ajeno);
+  const xA = constrain(px, tw / 2 + 16, width - tw / 2 - 16);   // que no se salga por los bordes
   noStroke();
   fill(236, 231, 223, aAjeno);
-  text(ajeno, px, yA);
-  const tw = textWidth(ajeno);
+  text(ajeno, xA, yA);
   stroke(240, 180, 76, aAjeno);
   strokeWeight(1.5);
-  line(px - tw / 2, yA - 7, px - tw / 2 + tw * constrain(e * 2, 0, 1), yA - 7);
+  line(xA - tw / 2, yA - 7, xA - tw / 2 + tw * constrain(e * 2, 0, 1), yA - 7);
 
   noStroke();
   const cp = color(colorDe(f.d));
@@ -291,7 +307,8 @@ function dibujarDigestion(f) {
   textFont(DISPLAY);
   textSize(20 * escala());
   textAlign(CENTER, TOP);
-  text(f.d.propio, cuerpo.x, cuerpo.y + R + 18);
+  const tp = textWidth(f.d.propio);
+  text(f.d.propio, constrain(cuerpo.x, tp / 2 + 16, width - tp / 2 - 16), cuerpo.y + R + 18);
 }
 
 // ---------- Textos ----------
@@ -323,6 +340,14 @@ function dibujarContador() {
   text(nf(comidos, 2) + ' / ' + nf(frags.length, 2), width - 24, 24);
   textSize(10);
   text('DEVORADOS', width - 24, 46);
+
+  // estado del sonido
+  const anchoAviso = width < 500 ? 130 : 300;
+  const activo = audio && audio.state === 'running';
+  fill(240, 180, 76, activo && !silencio ? 200 : 255 * (0.75 + 0.25 * sin(millis() * 0.004)));
+  text(!activo ? '♪ TOCA PARA ACTIVAR EL SONIDO'
+       : silencio ? '♪ SONIDO APAGADO · TOCA AQUÍ'
+       : '♪ SONIDO · TOCA AQUÍ PARA APAGAR', width - 24 - anchoAviso, 66, anchoAviso, 40);
 }
 
 function dibujarFicha() {
@@ -336,7 +361,10 @@ function dibujarFicha() {
     fill(240, 180, 76, 255 * respira);
     textFont(MONO);
     textSize(13);
-    text(guiado ? 'Lleva el tejido hasta un encuadre.' : 'Mueve el cursor o el dedo: el tejido te sigue y devora los fragmentos del cine.', x, y0 + 60, w, 60);
+    const activo = audio && audio.state === 'running';
+    text(!activo ? 'Toca la pantalla para activar el sonido. Luego mueve el cursor o el dedo: el tejido te sigue y devora los fragmentos del cine.'
+         : guiado ? 'Lleva el tejido hasta un encuadre.'
+         : 'Mueve el cursor o el dedo: el tejido te sigue y devora los fragmentos del cine.', x, y0 + 50, w, 70);
   } else {
     const a = 255 * constrain((millis() - ultimoDesde) / 600, 0, 1);
     const c = color(colorDe(ultimo));
@@ -388,16 +416,124 @@ function mouseMoved() { guiado = true; }
 
 function mouseDragged() {
   guiado = true;
+  prepararAudio();
   return false;   // en el celular, evita que la página se mueva
 }
 
+function mouseReleased() { prepararAudio(); }
+
 function mousePressed() {
+  const yaSonaba = audio && audio.state === 'running';
+  prepararAudio();
+
+  // tocar la esquina del sonido lo apaga o lo enciende
+  if (yaSonaba && mouseX > width - 200 && mouseY < 90) {
+    silencio = !silencio;
+    return;
+  }
   if (fin && millis() - finDesde > 1500) {
     iniciar();
     guiado = false;
   } else {
     guiado = true;
   }
+}
+
+// ---------- Sonido de cada bocado ----------
+function sonidoListo() {
+  return audio && audio.state === 'running' && !silencio;
+}
+
+function frec(nota, octava = 1) {
+  return BASE * octava * pow(2, ESCALA[nota % ESCALA.length] / 12);
+}
+
+function chasquido() {
+  // lo ajeno: un golpe seco y corto, como una claqueta
+  const t = audio.currentTime, n = floor(audio.sampleRate * 0.06);
+  const buf = audio.createBuffer(1, n, audio.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * pow(1 - i / n, 4);
+  const src = audio.createBufferSource();
+  src.buffer = buf;
+  const filtro = audio.createBiquadFilter();
+  filtro.type = 'bandpass'; filtro.frequency.value = 2200; filtro.Q.value = 0.8;
+  const vol = audio.createGain();
+  vol.gain.value = VOLUMEN * 2.5;
+  src.connect(filtro).connect(vol).connect(audio.destination);
+  src.start(t);
+}
+
+function ablandar(nota) {
+  // mientras digiere: un tono áspero que se suaviza y baja hasta su nota
+  const t = audio.currentTime, dur = DIGESTION, f = frec(nota);
+  const osc = audio.createOscillator();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(f * 1.5, t);
+  osc.frequency.exponentialRampToValueAtTime(f, t + dur * 0.8);
+  const filtro = audio.createBiquadFilter();
+  filtro.type = 'lowpass';
+  filtro.frequency.setValueAtTime(3500, t);
+  filtro.frequency.exponentialRampToValueAtTime(300, t + dur);
+  const vol = audio.createGain();
+  vol.gain.setValueAtTime(0, t);
+  vol.gain.linearRampToValueAtTime(VOLUMEN * 0.45, t + 0.05);
+  vol.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.connect(filtro).connect(vol).connect(audio.destination);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+
+function hilo(nota, quien, retraso = 0, largo = 2.4) {
+  // lo propio: una nota limpia que queda resonando, con el timbre de quien lo transformó
+  if (quien === 'Mileidy' || quien === 'ambos') tono(frec(nota, 2), 'sine', retraso, largo);
+  if (quien === 'Luis' || quien === 'ambos') tono(frec(nota, 1), 'triangle', retraso, largo);
+}
+
+function tono(f, timbre, retraso, largo) {
+  const t = audio.currentTime + retraso;
+  const osc = audio.createOscillator();
+  osc.type = timbre;
+  osc.frequency.value = f;
+  const vol = audio.createGain();
+  vol.gain.setValueAtTime(0, t);
+  vol.gain.linearRampToValueAtTime(VOLUMEN, t + 0.02);
+  vol.gain.exponentialRampToValueAtTime(0.0001, t + largo);
+  osc.connect(vol).connect(audio.destination);
+  osc.start(t);
+  osc.stop(t + largo + 0.1);
+}
+
+function acordeFinal() {
+  // todo lo devorado suena junto: las diez notas en arpegio y una nota grave que las sostiene
+  frags.forEach((f, i) => hilo(f.nota, f.d.quien, 0.6 + i * 0.14, 4));
+  tono(frec(0, 1), 'triangle', 0.6, 5);
+}
+
+function prepararAudio() {
+  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+  if (audio.state !== 'running') audio.resume();
+  if (desbloqueado) return;
+  // En iPhone, el interruptor de silencio apaga el sonido de las páginas.
+  // Un audio silencioso en bucle le indica al teléfono que esto es reproducción, como un video.
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  const mudo = new Audio(crearSilencio());
+  mudo.loop = true;
+  mudo.play().then(() => { desbloqueado = true; }).catch(() => {});
+  const s = audio.createBufferSource();
+  s.buffer = audio.createBuffer(1, 1, 22050);
+  s.connect(audio.destination);
+  s.start(0);
+}
+
+function crearSilencio() {
+  // un archivo .wav de una décima de segundo en silencio, fabricado en el momento
+  const n = 4410, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const w = (o, txt) => { for (let i = 0; i < txt.length; i++) v.setUint8(o + i, txt.charCodeAt(i)); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, 44100, true); v.setUint32(28, 88200, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  w(36, 'data'); v.setUint32(40, n * 2, true);
+  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
 }
 
 // ---------- Atmósfera ----------
