@@ -199,6 +199,24 @@ function dibujarVoz(voz, a) {
   textSize(15);
   text('Voz', voz.x, voz.y);
 
+  // instrucciones de sonido
+  const respira = 0.75 + 0.25 * sin(millis() * 0.003); // el texto respira para llamar la atención
+  const aviso = vozSuena() ? '■ toca para detener' : '♪ toca la voz para escucharla';
+  noStroke();
+  textSize(12);
+  fill(12, 11, 16, 220 * a); // un fondo oscuro para que las líneas no lo tapen
+  rectMode(CENTER);
+  rect(voz.x, voz.y + 52, textWidth(aviso) + 16, 22, 4);
+  rectMode(CORNER);
+  textAlign(CENTER, CENTER);
+  fill(240, 180, 76, 255 * a * respira);
+  text(aviso, voz.x, voz.y + 52);
+  if (!elegido && !vozSuena()) {
+    fill(236, 231, 223, 160 * a);
+    textAlign(CENTER, BOTTOM);
+    text('o toca un concepto para oír sus uniones', width / 2, height - 24);
+  }
+
   if (elegido) {
     const c = CONCEPTOS.find(c => c.nombre === elegido);
     fill(236, 231, 223, 230 * a);
