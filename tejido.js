@@ -51,6 +51,9 @@ const SONIDOS = {
 };
 const PAUSA = 0.35;      // segundos entre una unión y la siguiente
 let audio = null;        // el motor de sonido del navegador; se crea con el primer clic
+const BASE = 220;        // frecuencia de la nota más grave (Hz). Los parlantes del celular casi no suenan por debajo de 200
+const VOLUMEN = 0.2;     // volumen de cada nota (0 a 1)
+let desbloqueado = false;
 let encendidas = {};     // clave de la unión → momento (millis) en que se enciende
 
 // ---------- La composición de la voz ----------
@@ -133,7 +136,7 @@ function dibujarHilo(tono, lado, voz) {
 
 // ---------- La voz y los conceptos ----------
 function posiciones(voz) {
-  const R = min(width, height) * 0.3;
+  const R = min(width * 0.28, height * 0.3); // en celular el círculo se ajusta al ancho
   return CONCEPTOS.map((c, i) => {
     const ang = -HALF_PI + TWO_PI * i / CONCEPTOS.length;
     return { ...c, x: voz.x + cos(ang) * R, y: voz.y + sin(ang) * R, ang };
@@ -176,7 +179,7 @@ function dibujarVoz(voz, a) {
     }
   }
 
-  textSize(12);
+  textSize(width < 500 ? 10 : 12);
   for (const n of nodos) {
     const on = encendidos.includes(n.nombre);
     const cerca = dist(mouseX, mouseY, n.x, n.y) < 16;
@@ -228,6 +231,7 @@ function dibujarVoz(voz, a) {
 
 // ---------- Interacción ----------
 function mouseClicked() {
+  prepararAudio();
   if (prof < 0.9) return;
   const voz = { x: width / 2, y: height * 0.6 };
 
@@ -264,8 +268,7 @@ function uniones() {
 }
 
 function componerVoz() {
-  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
-  audio.resume();
+  prepararAudio();
   elegido = null;
   encendidas = {};
 
@@ -274,8 +277,8 @@ function componerVoz() {
     const retraso = PAUSA_VOZ * k;
     encendidas[u.clave] = millis() + retraso * 1000;
     if (!VOZ_AUDIO) {
-      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.a), retraso, 'sine', 1);    // hilo de Keratuma
-      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.b), retraso, 'triangle', 0.5); // hilo de Luis, una octava abajo
+      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.a), retraso, 'sine', 2);     // hilo de Keratuma, una octava arriba
+      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.b), retraso, 'triangle', 1); // hilo de Luis
     }
   });
 
@@ -287,8 +290,8 @@ function componerVoz() {
   } else {
     // cierre: una nota grave larga que reúne todo
     const fin = PAUSA_VOZ * lista.length;
-    tocarNota(0, fin, 'sine', 0.25, 4);
-    tocarNota(3, fin, 'sine', 0.5, 4);
+    tocarNota(0, fin, 'triangle', 0.5, 4);
+    tocarNota(3, fin, 'triangle', 1, 4);
   }
   vozHasta = millis() + dura * 1000;
 }
@@ -301,9 +304,43 @@ function detenerVoz() {
 }
 
 // ---------- Sonido ----------
-function tejerSonido(c) {
+// Prepara el sonido en el celular. Se llama en cada toque: el primero que el navegador acepte lo deja listo.
+function prepararAudio() {
   if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
-  audio.resume();
+  if (audio.state !== 'running') audio.resume();
+  if (desbloqueado) return;
+
+  // En iPhone, el interruptor de silencio apaga el sonido de las páginas.
+  // Un audio silencioso en bucle le indica al teléfono que esto es reproducción de sonido, como un video.
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  const silencio = new Audio(crearSilencio());
+  silencio.loop = true;
+  silencio.play().then(() => { desbloqueado = true; }).catch(() => {});
+
+  // un instante de silencio en el motor termina de despertarlo
+  const s = audio.createBufferSource();
+  s.buffer = audio.createBuffer(1, 1, 22050);
+  s.connect(audio.destination);
+  s.start(0);
+}
+
+function crearSilencio() {
+  // un archivo .wav de una décima de segundo en silencio, fabricado en el momento
+  const n = 4410, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const w = (o, txt) => { for (let i = 0; i < txt.length; i++) v.setUint8(o + i, txt.charCodeAt(i)); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, 44100, true); v.setUint32(28, 88200, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  w(36, 'data'); v.setUint32(40, n * 2, true);
+  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+}
+
+// el sonido se prepara desde el primer toque de pantalla, aunque todavía no se esté en el fondo
+function mousePressed() { prepararAudio(); }
+function mouseReleased() { prepararAudio(); }
+
+function tejerSonido(c) {
+  prepararAudio();
 
   tocarNota(CONCEPTOS.findIndex(x => x.nombre === c.nombre), 0); // la nota del concepto tocado
 
@@ -320,17 +357,17 @@ function tejerSonido(c) {
   });
 }
 
-function tocarNota(i, retraso, timbre = 'sine', octava = 1, largo = 1.6) {
+function tocarNota(i, retraso, timbre = 'triangle', octava = 1, largo = 1.6) {
   if (i < 0) return;
   const t = audio.currentTime + retraso;
-  const frecuencia = 220 * octava * pow(2, ESCALA[i % ESCALA.length] / 12);
+  const frecuencia = BASE * octava * pow(2, ESCALA[i % ESCALA.length] / 12);
 
   const osc = audio.createOscillator();
   const vol = audio.createGain();
   osc.type = timbre;
   osc.frequency.value = frecuencia;
   vol.gain.setValueAtTime(0, t);
-  vol.gain.linearRampToValueAtTime(0.12, t + 0.02);        // ataque corto, como una cuerda
+  vol.gain.linearRampToValueAtTime(VOLUMEN, t + 0.02);        // ataque corto, como una cuerda
   vol.gain.exponentialRampToValueAtTime(0.0001, t + largo); // y se apaga despacio
   osc.connect(vol).connect(audio.destination);
   osc.start(t);
