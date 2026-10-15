@@ -41,6 +41,26 @@ let prof = 0;      // dónde está ahora
 let elegido = null;
 let grano;
 
+// ---------- Sonido de las uniones ----------
+// Cada concepto tiene una nota (escala pentatónica, una por concepto, en el mismo orden de CONCEPTOS).
+const ESCALA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24];
+// Opcional: un archivo de audio propio para una unión. La clave son los dos nombres en orden alfabético, separados por |.
+// Si una unión tiene archivo, suena el archivo; si no, suena su nota.
+const SONIDOS = {
+  // 'Memoria|Territorio': 'assets/audio/memoria-territorio.mp3',
+};
+const PAUSA = 0.35;      // segundos entre una unión y la siguiente
+let audio = null;        // el motor de sonido del navegador; se crea con el primer clic
+let encendidas = {};     // clave de la unión → momento (millis) en que se enciende
+
+// ---------- La composición de la voz ----------
+// Opcional: una composición propia en audio. Si dejas '', suena la composición generada.
+const VOZ_AUDIO = '';    // por ejemplo 'assets/audio/voz.mp3'
+const PAUSA_VOZ = 0.5;   // segundos entre una unión y la siguiente en la composición
+let vozHasta = 0;        // millis en que termina la composición (0 = no suena)
+let notasVivas = [];     // osciladores programados, para poder detenerlos
+let vozArchivo = null;   // el reproductor del audio propio
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('"IBM Plex Mono", monospace');
@@ -138,10 +158,21 @@ function dibujarVoz(voz, a) {
       vistas.add(clave);
       const m = nodos.find(x => x.nombre === otro);
       if (!m) continue;
-      const on = elegido && (n.nombre === elegido || otro === elegido);
+      const inicio = encendidas[clave];
+      const on = (elegido || vozSuena()) && inicio !== undefined && millis() >= inicio;
       stroke(on ? color(240, 180, 76, 230 * a) : color(236, 231, 223, 55 * a));
       strokeWeight(on ? 1.8 : 1);
       line(n.x, n.y, m.x, m.y);
+
+      // un punto de luz recorre la unión mientras suena
+      const viaje = (millis() - inicio) / 600;
+      if (on && viaje < 1) {
+        const desde = n.nombre === elegido ? n : m;
+        const hasta = desde === n ? m : n;
+        noStroke();
+        fill(240, 180, 76, 255 * a);
+        circle(lerp(desde.x, hasta.x, viaje), lerp(desde.y, hasta.y, viaje), 7);
+      }
     }
   }
 
@@ -160,7 +191,8 @@ function dibujarVoz(voz, a) {
   fill(12, 11, 16, 255 * a);
   stroke(240, 180, 76, 255 * a);
   strokeWeight(1.5);
-  circle(voz.x, voz.y, 64);
+  const latido = vozSuena() ? 6 * sin(millis() * 0.008) : 0; // la voz late mientras suena
+  circle(voz.x, voz.y, 64 + latido);
   noStroke();
   fill(240, 180, 76, 255 * a);
   textAlign(CENTER, CENTER);
@@ -180,8 +212,113 @@ function dibujarVoz(voz, a) {
 function mouseClicked() {
   if (prof < 0.9) return;
   const voz = { x: width / 2, y: height * 0.6 };
+
+  if (dist(mouseX, mouseY, voz.x, voz.y) < 34) { // se tocó «Voz»
+    if (vozSuena()) detenerVoz(); else componerVoz();
+    return;
+  }
+
+  detenerVoz();
   const tocado = posiciones(voz).find(n => dist(mouseX, mouseY, n.x, n.y) < 16);
   elegido = tocado ? tocado.nombre : null;
+  encendidas = {};
+  if (tocado) tejerSonido(tocado);
+}
+
+// ---------- La composición de la voz ----------
+function vozSuena() {
+  return millis() < vozHasta;
+}
+
+function uniones() {
+  // todas las relaciones del diagrama, cada par una sola vez, en el orden del círculo
+  const lista = [];
+  const vistas = new Set();
+  for (const c of CONCEPTOS) {
+    for (const otro of c.con) {
+      const clave = [c.nombre, otro].sort().join('|');
+      if (vistas.has(clave)) continue;
+      vistas.add(clave);
+      lista.push({ a: c.nombre, b: otro, clave });
+    }
+  }
+  return lista;
+}
+
+function componerVoz() {
+  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+  audio.resume();
+  elegido = null;
+  encendidas = {};
+
+  const lista = uniones();
+  lista.forEach((u, k) => {
+    const retraso = PAUSA_VOZ * k;
+    encendidas[u.clave] = millis() + retraso * 1000;
+    if (!VOZ_AUDIO) {
+      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.a), retraso, 'sine', 1);    // hilo de Keratuma
+      tocarNota(CONCEPTOS.findIndex(x => x.nombre === u.b), retraso, 'triangle', 0.5); // hilo de Luis, una octava abajo
+    }
+  });
+
+  let dura = PAUSA_VOZ * lista.length + 3;
+  if (VOZ_AUDIO) {
+    vozArchivo = new Audio(VOZ_AUDIO);
+    vozArchivo.play().catch(() => {});
+    vozArchivo.onloadedmetadata = () => { vozHasta = millis() + vozArchivo.duration * 1000; };
+  } else {
+    // cierre: una nota grave larga que reúne todo
+    const fin = PAUSA_VOZ * lista.length;
+    tocarNota(0, fin, 'sine', 0.25, 4);
+    tocarNota(3, fin, 'sine', 0.5, 4);
+  }
+  vozHasta = millis() + dura * 1000;
+}
+
+function detenerVoz() {
+  vozHasta = 0;
+  if (vozArchivo) { vozArchivo.pause(); vozArchivo = null; }
+  if (audio) for (const o of notasVivas) { try { o.stop(); } catch (e) {} }
+  notasVivas = [];
+}
+
+// ---------- Sonido ----------
+function tejerSonido(c) {
+  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+  audio.resume();
+
+  tocarNota(CONCEPTOS.findIndex(x => x.nombre === c.nombre), 0); // la nota del concepto tocado
+
+  c.con.forEach((otro, j) => {
+    const retraso = PAUSA * (j + 1);
+    const clave = [c.nombre, otro].sort().join('|');
+    encendidas[clave] = millis() + retraso * 1000;
+
+    if (SONIDOS[clave]) {
+      setTimeout(() => new Audio(SONIDOS[clave]).play().catch(() => {}), retraso * 1000);
+    } else {
+      tocarNota(CONCEPTOS.findIndex(x => x.nombre === otro), retraso);
+    }
+  });
+}
+
+function tocarNota(i, retraso, timbre = 'sine', octava = 1, largo = 1.6) {
+  if (i < 0) return;
+  const t = audio.currentTime + retraso;
+  const frecuencia = 220 * octava * pow(2, ESCALA[i % ESCALA.length] / 12);
+
+  const osc = audio.createOscillator();
+  const vol = audio.createGain();
+  osc.type = timbre;
+  osc.frequency.value = frecuencia;
+  vol.gain.setValueAtTime(0, t);
+  vol.gain.linearRampToValueAtTime(0.12, t + 0.02);        // ataque corto, como una cuerda
+  vol.gain.exponentialRampToValueAtTime(0.0001, t + largo); // y se apaga despacio
+  osc.connect(vol).connect(audio.destination);
+  osc.start(t);
+  osc.stop(t + largo + 0.1);
+  notasVivas.push(osc);
+  osc.onended = () => { notasVivas = notasVivas.filter(o => o !== osc); };
 }
 
 // ---------- Timecode ----------
