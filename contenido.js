@@ -74,7 +74,7 @@ window.CONTENIDO = {
       linea: 'Mileidy Orozco Domicó · 2011 · 22 min',
       ver: 'Trailer. En emberá, con subtítulos. Mileidy muestra su territorio en Mutatá (Antioquia) y su relación con la familia, la naturaleza y las costumbres de su comunidad, y cómo esas tradiciones cambian.',
       escuchar: 'Su voz en off, en lengua emberá: «Esta tierra no es la de nuestros ancestros… Pero es bueno tener mis pies aquí».',
-      video: 'https://vimeo.com/34989341',
+      video: 'https://vimeo.com/43216725',
       videoInicio: '',
       videoFin: '',
       imagenes: [],
