@@ -68,29 +68,37 @@ window.CONTENIDO = {
      imagenes: fotogramas en assets/img/, ej. ['assets/img/keratuma-1.jpg', 'assets/img/keratuma-2.jpg']
      audio:    voz del cineasta en assets/audio/, ej. 'assets/audio/keratuma-voz.mp3'
      enlaces:  otros recursos, ej. [{ texto: 'Entrevista completa', url: 'https://...' }] */
-  peliculas: {
+    peliculas: {
     a: {
-      titulo: '[Título de la película]',
-      linea: 'Keratuma · año',
-      ver: '[Fragmentos de la película: 3 o 4 clips cortos o fotogramas.]',
-      escuchar: '[La voz de la cineasta: entrevista, voz en off, fragmento de lengua propia.]',
-      video: 'https://www.youtube.com/watch?v=Zka_qL_KFaI',
-      videoInicio: '0:00',
+      titulo: 'Mu drua (Mi tierra)',
+      linea: 'Mileidy Orozco Domicó · 2011 · 22 min',
+      ver: 'En emberá, con subtítulos. Mileidy muestra su territorio en Mutatá (Antioquia) y su relación con la familia, la naturaleza y las costumbres de su comunidad, y cómo esas tradiciones cambian.',
+      escuchar: 'Su voz en off, en lengua emberá: «Esta tierra no es la de nuestros ancestros… Pero es bueno tener mis pies aquí».',
+      video: 'https://www.youtube.com/watch?v=5o5SK00s8IA',
+      videoInicio: '',
       videoFin: '',
       imagenes: [],
-      audio: '',
-      enlaces: [],
+      audio: 'keratuma-voz.mp3',
+      enlaces: [
+        { texto: 'Entrevista: Cine tejido con memoria y resistencia', url: 'https://www.youtube.com/watch?v=Zka_qL_KFaI' },
+        { texto: 'Mu drua en Vimeo', url: 'https://vimeo.com/34989341' }
+      ],
       viaje: ['Territorio', 'Medellín', 'Formación', 'Memoria', 'Película']
     },
     b: {
-      titulo: '[Título de la película]',
-      linea: 'Luis Tróchez Tunubalá · año',
-      ver: '[Fragmentos de la película: 3 o 4 clips cortos o fotogramas.]',
-      escuchar: '[La voz del cineasta: entrevista, voz en off, fragmento de lengua propia.]',
-      video: 'https://www.youtube.com/watch?v=96Nj8GM00tg&t=2s',
+      titulo: 'Na, misak',
+      linea: 'Luis Tróchez Tunubalá · 2017 · 25 min',
+      ver: 'Un realizador misak prepara un documental sobre su pueblo. Al revisar referencias, descubre un patrón en cómo el cine y la televisión han retratado a los indígenas, y se pregunta qué significa ser misak.',
+      escuchar: 'Su voz en off: «En la ciudad entendí que el ser indígena es sinónimo de atraso… Me pregunté siempre: ¿por qué nos ven así?».',
+      video: 'https://www.youtube.com/watch?v=R3myO4gbkS0',
+      videoInicio: '',
+      videoFin: '',
       imagenes: [],
-      audio: '',
-      enlaces: [],
+      audio: 'luis-voz.mp3',
+      enlaces: [
+        { texto: 'Ver completa en RTVCPlay', url: 'https://rtvcplay.co/cortometrajes-documentales/na-misak' },
+        { texto: 'Indígenas, tradición y modernidad (Señal Memoria)', url: 'https://www.youtube.com/watch?v=96Nj8GM00tg' }
+      ],
       viaje: ['Territorio', 'Cali', 'Formación', 'Memoria', 'Película']
     }
   },
