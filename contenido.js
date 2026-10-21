@@ -15,8 +15,8 @@ window.CONTENIDO = {
 
   /* Frases que van rotando en la pantalla inicial (fragmentos de voz) */
   frasesInicio: [
-    '[voz · fragmento de la película de Keratuma]',
-    '[voz · fragmento de la película de Luis]',
+    'Mu drua, «mi tierra» en emberá. Es el título de la película de Keratuma y su traducción aparece en las fuentes',
+    'Namui wam, «nuestra lengua». Es uno de los nombres que los misak dan a su lengua',
     '[sonido de territorio]'
   ],
 
