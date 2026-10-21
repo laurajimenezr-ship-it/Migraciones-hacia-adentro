@@ -24,13 +24,11 @@ window.CONTENIDO = {
   fragmentos: {
     a: [ // Keratuma · Mileidy Domicó
       'Mutatá-Antioquia. Nació siendo tejedora entre las selvas del Urabá',
-      '[Fragmento 2: la salida forzada. Qué se lleva, qué se queda.]',
-      '[Fragmento 3: la llegada a Medellín.]'
+      '«Esta tierra no es la de nuestros ancestros, no es la tuya Abuelo, no es la tuya Abuela. Es la tierra donde ha tocado vivir. Pero es bueno tener mis pies aquí, mi tierra, donde estoy viviendo no te puedo sentir.»'
     ],
     b: [ // Luis Tróchez Tunubalá
       'Indígena del pueblo Misak del municipio de Silvia Cauca. Comunicador social y periodista. Licenciado en Lenguas Extranjeras (inglés y francés) de la Universidad del Valle',
-      '[Fragmento 2: imágenes de Cali. La ciudad como lugar de trabajo y estudio.]',
-      '[Fragmento 3: lo que se mantiene del territorio en la ciudad.]'
+      '«Yo hago parte de esa gran diversidad cultural. Vivo al noroeste del departamento del Cauca con mi padre, mi madre y mi abuela. En la ciudad entendí que el ser indígena es sinónimo de atraso, de salvaje, de monte, de ignorante. Me pregunté siempre: ¿por qué nos ven así?'
     ]
   },
 
