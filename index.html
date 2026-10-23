@@ -136,6 +136,51 @@
         <div class="c">universidad</div>
         <div><span class="label" style="color:var(--hiloB)">Lo ajeno</span><br>gramática del cine, encuadre, montaje</div>
       </div>
+            <!-- ================= GALERÍA DESLIZABLE (swipe) =================
+           · Cada foto es un <figure>. Cambia el nombre en src="…" y el pie en <figcaption>
+           · Fotos verticales 4:5 (800 × 1000). Para agregar una, copia un <figure> … </figure> completo
+           · Para quitar una foto, borra su <figure> … </figure> completo
+           · Se desliza con el dedo, con el trackpad o con las flechas ◀ ▶
+           ================================================================ -->
+      <div class="galeria-swipe" style="position:relative;margin:2.6rem 0 0">
+        <div class="label" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem">
+          <span><span style="color:var(--hiloA)">Keratuma</span> · <span style="color:var(--hiloB)">Luis</span> — desliza para ver</span>
+          <span style="display:flex;gap:.4rem">
+            <button type="button" aria-label="Foto anterior" onclick="var p=this.closest('.galeria-swipe').querySelector('.pista');p.scrollBy({left:-p.clientWidth*.8,behavior:'smooth'})" style="width:40px;height:40px;border:1px solid currentColor;background:transparent;cursor:pointer">◀</button>
+            <button type="button" aria-label="Foto siguiente" onclick="var p=this.closest('.galeria-swipe').querySelector('.pista');p.scrollBy({left:p.clientWidth*.8,behavior:'smooth'})" style="width:40px;height:40px;border:1px solid currentColor;background:transparent;cursor:pointer">▶</button>
+          </span>
+        </div>
+        <div class="pista" tabindex="0" aria-label="Galería de fotos de Keratuma y Luis" style="display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;padding-bottom:.8rem;scrollbar-width:thin">
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-keratuma-1.jpg" alt="Mileidy de espaldas cargando un canasto tejido" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloA)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Keratuma · En el territorio, con el canasto a la espalda</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-keratuma-2.jpg" alt="Mileidy revisa el visor de la cámara junto a un camarógrafo" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloA)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Keratuma · Mirando el encuadre junto al camarógrafo</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-keratuma-3.jpg" alt="Mileidy filma con una cámara de video junto a un fogón" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloA)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Keratuma · Filmando entre el humo del fogón</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-keratuma-4.jpg" alt="Mileidy filma sentada en una calle de la ciudad" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloA)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Keratuma · Medellín: la cámara en la ciudad</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-luis-1.jpg" alt="Retrato de un hombre misak con sombrero de iraca y bufanda roja" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloB)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Luis · Retrato con el sombrero de iraca</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-luis-2.jpg" alt="Equipo de rodaje con cámara y micrófono en una habitación" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloB)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Luis · En el set: preparando una escena</figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(220px,28vw,320px);margin:0;scroll-snap-align:start">
+            <img src="galeria-luis-3.jpg" alt="Hombre de camisa blanca con los brazos cruzados durante un rodaje" loading="lazy" style="display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#1a1622;border-top:3px solid var(--hiloB)">
+            <figcaption class="label" style="margin-top:.5rem;line-height:1.4">Luis · Rodaje: frente a la cámara</figcaption>
+          </figure>
+        </div>
+      </div>
       <div class="gap"></div>
       <p class="big">Sobre todo aparece el cine de lo real en primera persona: sujetos colectivos que se piensan en singular.</p>
       <p class="susurro" style="margin-top:3rem">Y en ese punto deciden mirar hacia dentro.</p>
