@@ -223,57 +223,56 @@
         <cite class="label" style="display:block;margin-top:.9rem;font-style:normal;color:var(--luz)">[Autor, año]</cite>
       </blockquote>
       <div class="perfo" aria-hidden="true"></div>
-     <!-- ================= HOJA DE CONTACTOS =================
-           Cada recuadro es un <div class="cuadro">. En cada uno puedes cambiar:
-           · src="…"  → la imagen (formato 4:3, por ejemplo 800 × 600)
-           · el texto pequeño de arriba (película · minuto)
-           · el título (<b>) y la frase (<small>)
-           Para quitar un recuadro, borra desde <div class="cuadro"…> hasta su </div> final.
-           La línea <div id="contactos" hidden></div> debe quedarse: la usa el código.
-           ====================================================== -->
+          <!-- ================= TIRA DE PELÍCULA: CORTOS =================
+           · Cada corto es un <figure>. Cambia:
+             - src="…"     → el video (.mp4)      - poster="…" → la imagen de portada (.jpg)
+             - el título (<b>) y la línea pequeña (autor · película · duración)
+           · Para agregar un corto, copia un <figure> … </figure> completo; para quitarlo, bórralo
+           · Borde naranja = Keratuma (hiloA), verde = Luis (hiloB), dorado = otros (luz)
+           · La línea <div id="contactos" hidden></div> debe quedarse: la usa el código
+           ============================================================== -->
       <div id="contactos" hidden></div>
-      <div class="contactos">
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloA)">
-          <img src="fragmento-keratuma-1.jpg" alt="Pie descalzo sobre arena oscura" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Mu drua · 0:00</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Cuerpo</b><br><small style="color:#ece7df">El pie descalzo sobre la arena: el territorio se mide con el cuerpo.</small></div>
+      <div class="tira-cortos" style="position:relative;margin:.6rem 0">
+        <div class="label" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem">
+          <span>Cortos · desliza y dale play</span>
+          <span style="display:flex;gap:.4rem">
+            <button type="button" aria-label="Corto anterior" onclick="var p=this.closest('.tira-cortos').querySelector('.pista');p.scrollBy({left:-p.clientWidth*.8,behavior:'smooth'})" style="width:40px;height:40px;border:1px solid currentColor;background:transparent;cursor:pointer">◀</button>
+            <button type="button" aria-label="Corto siguiente" onclick="var p=this.closest('.tira-cortos').querySelector('.pista');p.scrollBy({left:p.clientWidth*.8,behavior:'smooth'})" style="width:40px;height:40px;border:1px solid currentColor;background:transparent;cursor:pointer">▶</button>
+          </span>
         </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloA)">
-          <img src="fragmento-keratuma-2.jpg" alt="Pies que caminan sobre la tierra" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Mu drua · 0:04</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Desplazamiento</b><br><small style="color:#ece7df">Caminar es la forma del relato. La cámara sigue los pasos, no el rostro.</small></div>
+        <div class="pista" tabindex="0" aria-label="Tira de cortos" style="display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;padding:14px;background:#0c0b10;scrollbar-width:thin">
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-2.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--hiloA)"><source src="corto-3-2.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.2</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">Voz en off de Keratuma</b><br><span class="label" style="color:var(--muted)">Keratuma · Mu drua (Mi tierra) · 0:31</span></figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-6.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--hiloA)"><source src="corto-3-6.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.6</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">La fotografía del abuelo</b><br><span class="label" style="color:var(--muted)">Keratuma · Mu drua (Mi tierra) · 1:18</span></figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-1.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--hiloB)"><source src="corto-3-1.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.1</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">Voz en off de Luis</b><br><span class="label" style="color:var(--muted)">Luis Tróchez Tunubalá · Na, misak · 2:01</span></figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-3.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--hiloB)"><source src="corto-3-3.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.3</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">El cuerpo frente a la cámara</b><br><span class="label" style="color:var(--muted)">Luis Tróchez Tunubalá · Na, misak · 0:34</span></figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-7.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--hiloB)"><source src="corto-3-7.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.7</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">El archivo en Na, misak</b><br><span class="label" style="color:var(--muted)">Archivo usado en Na, misak · 0:25</span></figcaption>
+          </figure>
+          <figure style="flex:0 0 clamp(250px,34vw,420px);margin:0;scroll-snap-align:start">
+            <video controls preload="none" playsinline poster="corto-3-5.jpg" style="display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border-top:3px solid var(--luz)"><source src="corto-3-5.mp4" type="video/mp4"></video>
+            <figcaption style="margin-top:.6rem;line-height:1.35"><span style="font-family:var(--mono);font-size:.7rem;color:var(--luz);letter-spacing:.08em">3.5</span><br><b style="font-family:var(--display);font-weight:400;font-size:1.1rem">Amado Villafaña en Nabusimake</b><br><span class="label" style="color:var(--muted)">Nabusimake: memorias de una independencia · 1:29</span></figcaption>
+          </figure>
         </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloA)">
-          <img src="fragmento-keratuma-3.jpg" alt="Reflejo de una persona en el agua de un río" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
+      </div>
+      <img src="fragmento-keratuma-3.jpg" alt="Reflejo de una persona en el agua de un río" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
           <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Mu drua · 0:22</span>
           <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Reflejo</b><br><small style="color:#ece7df">La figura aparece solo en el agua: una imagen doble de sí misma.</small></div>
         </div>
         <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloA)">
           <img src="fragmento-keratuma-4.jpg" alt="Mano sobre una cerca de alambre de púas" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Mu drua · 0:30</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Frontera</b><br><small style="color:#ece7df">Una mano en el alambre de púas: la tierra donde «ha tocado vivir».</small></div>
-        </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloB)">
-          <img src="fragmento-luis-1.jpg" alt="Sombrero misak de iraca visto desde arriba" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Na, misak · 0:01</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Voz propia</b><br><small style="color:#ece7df">El rostro bajo el sombrero de iraca: hablar sin exponerse.</small></div>
-        </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloB)">
-          <img src="fragmento-luis-2.jpg" alt="Detalle de ruana negra y bufanda roja" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Na, misak · 0:32</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Plano detalle</b><br><small style="color:#ece7df">La ruana y el rebozo en primer plano, antes que el estereotipo.</small></div>
-        </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloB)">
-          <img src="fragmento-luis-3.jpg" alt="Retrato de cuerpo entero sobre fondo negro" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Na, misak · 1:20</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Retrato</b><br><small style="color:#ece7df">De cuerpo entero frente al vacío: «hay un ser humano».</small></div>
-        </div>
-        <div class="cuadro" style="background:#000;border-top:2px solid var(--hiloB)">
-          <img src="fragmento-luis-4.jpg" alt="Fotografía de archivo de una comunidad indígena" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
-          <span class="tcode" style="position:relative;z-index:1;color:#ece7df">Na, misak · 1:41</span>
-          <div style="position:relative;z-index:1;text-shadow:0 1px 3px #000"><b>Archivo</b><br><small style="color:#ece7df">La imagen de archivo: cómo nos miraron otros.</small></div>
-        </div>
-      </div>
       <div class="perfo" aria-hidden="true"></div>
     </div>
   </section>
