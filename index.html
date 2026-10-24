@@ -96,13 +96,15 @@
       <div class="eyebrow label"><b>II</b><span>La ciudad</span></div>
       <p class="big">La crisis de los metarelatos (El nacimiento de las micropolíticas).</p>
       <p class="note">En los años sesenta, las grandes promesas de la modernidad (el progreso indefinido y las revoluciones centralizadas) entraron en crisis. De las grietas de esa incertidumbre no surgieron verdades dominantes, sino las micronarrativas de minorías, migrantes y pueblos originarios que reclamaron su propio derecho a narrarse.</p>
-            <!-- ================= DESLIZADOR DE LENTE EN VIDEO (antes / después) =================
+               <!-- ================= DESLIZADOR DE LENTE EN VIDEO CON SONIDO A VOLUNTAD =================
            · Video IZQUIERDO = metarrelatos.mp4 (+ metarrelatos.webm de respaldo)
            · Video DERECHO  = micropoliticas.mp4 (+ micropoliticas.webm de respaldo)
-           · Los videos se reproducen solos, en bucle y SIN sonido (los navegadores lo exigen)
+           · Los videos se reproducen solos, en bucle y en silencio.
+           · Los botones «♪ Escuchar» de abajo activan el sonido de UN video a la vez:
+             al tocar uno, el otro se silencia. Tocar de nuevo el mismo lo silencia.
            · poster="…" es la imagen que se ve mientras carga el video
            · value="50" = dónde empieza la línea (50 = en la mitad)
-           ================================================================================== -->
+           ====================================================================================== -->
       <figure class="lente" style="--pos:50%;position:relative;margin:2.6rem 0 0;max-width:100%;aspect-ratio:16/9;overflow:hidden;background:#1a1622;user-select:none;touch-action:pan-y">
         <!-- derecha: MICROPOLÍTICAS (va debajo) -->
         <video poster="micropoliticas.jpg" autoplay muted loop playsinline preload="auto" aria-label="Amado Villafaña en Nabusimake: memorias de una independencia" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="micropoliticas.mp4" type="video/mp4"><source src="micropoliticas.webm" type="video/webm"></video>
@@ -124,6 +126,11 @@
         <input type="range" min="0" max="100" value="50" aria-label="Deslizar entre metarrelatos y micropolíticas"
                oninput="this.parentNode.style.setProperty('--pos', this.value + '%')"
                style="position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize">
+        <!-- botones de sonido: data-v="0" = metarrelatos (izquierda), data-v="1" = micropolíticas (derecha) -->
+        <button type="button" data-v="0" onclick="(function(b){var f=b.parentNode,vs=f.querySelectorAll('video'),v=vs[+b.dataset.v],s=v.muted;vs.forEach(function(x){x.muted=true});v.muted=!s;f.querySelectorAll('button[data-v]').forEach(function(x){x.textContent=vs[+x.dataset.v].muted?'♪ Escuchar':'♪ Silenciar'})})(this)"
+                style="position:absolute;left:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
+        <button type="button" data-v="1" onclick="(function(b){var f=b.parentNode,vs=f.querySelectorAll('video'),v=vs[+b.dataset.v],s=v.muted;vs.forEach(function(x){x.muted=true});v.muted=!s;f.querySelectorAll('button[data-v]').forEach(function(x){x.textContent=vs[+x.dataset.v].muted?'♪ Escuchar':'♪ Silenciar'})})(this)"
+                style="position:absolute;right:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
       </figure>
       <p class="label" style="margin-top:.7rem;opacity:.7">Desliza la línea: de la mirada desde afuera a la voz desde adentro</p>
     </div>
