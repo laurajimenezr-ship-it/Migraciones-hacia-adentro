@@ -150,13 +150,6 @@
         </script>
       </figure>
       <p class="label" style="margin-top:.7rem;opacity:.7">Desliza la línea: de la mirada desde afuera a la voz desde adentro</p>
-        <!-- botones de sonido: data-v="0" = metarrelatos (izquierda), data-v="1" = micropolíticas (derecha) -->
-        <button type="button" data-v="0" onclick="(function(b){var f=b.parentNode,vs=f.querySelectorAll('video'),v=vs[+b.dataset.v],s=v.muted;vs.forEach(function(x){x.muted=true});v.muted=!s;f.querySelectorAll('button[data-v]').forEach(function(x){x.textContent=vs[+x.dataset.v].muted?'♪ Escuchar':'♪ Silenciar'})})(this)"
-                style="position:absolute;left:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
-        <button type="button" data-v="1" onclick="(function(b){var f=b.parentNode,vs=f.querySelectorAll('video'),v=vs[+b.dataset.v],s=v.muted;vs.forEach(function(x){x.muted=true});v.muted=!s;f.querySelectorAll('button[data-v]').forEach(function(x){x.textContent=vs[+x.dataset.v].muted?'♪ Escuchar':'♪ Silenciar'})})(this)"
-                style="position:absolute;right:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
-      </figure>
-      <p class="label" style="margin-top:.7rem;opacity:.7">Desliza la línea: de la mirada desde afuera a la voz desde adentro</p>
     </div>
   </section>
 
