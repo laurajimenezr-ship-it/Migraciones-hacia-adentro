@@ -96,20 +96,20 @@
       <div class="eyebrow label"><b>II</b><span>La ciudad</span></div>
       <p class="big">La crisis de los metarelatos (El nacimiento de las micropolíticas).</p>
       <p class="note">En los años sesenta, las grandes promesas de la modernidad (el progreso indefinido y las revoluciones centralizadas) entraron en crisis. De las grietas de esa incertidumbre no surgieron verdades dominantes, sino las micronarrativas de minorías, migrantes y pueblos originarios que reclamaron su propio derecho a narrarse.</p>
-               <!-- ================= DESLIZADOR DE LENTE EN VIDEO CON SONIDO A VOLUNTAD =================
-           · Video IZQUIERDO = metarrelatos.mp4 (+ metarrelatos.webm de respaldo)
-           · Video DERECHO  = micropoliticas.mp4 (+ micropoliticas.webm de respaldo)
-           · Los videos se reproducen solos, en bucle y en silencio.
-           · Los botones «♪ Escuchar» de abajo activan el sonido de UN video a la vez:
-             al tocar uno, el otro se silencia. Tocar de nuevo el mismo lo silencia.
+                    <!-- ================= DESLIZADOR DE LENTE EN VIDEO CON SONIDO =================
+           · Video IZQUIERDO = metarrelatos.mp4  (data-lado="izq")
+           · Video DERECHO  = micropoliticas.mp4 (data-lado="der")
+           · Arrancan solos, en bucle y en silencio (los navegadores lo exigen).
+           · Cada botón «♪ Escuchar» enciende el sonido de SU video y silencia el otro.
+             Tocarlo de nuevo lo vuelve a silenciar.
            · poster="…" es la imagen que se ve mientras carga el video
            · value="50" = dónde empieza la línea (50 = en la mitad)
-           ====================================================================================== -->
+           =========================================================================== -->
       <figure class="lente" style="--pos:50%;position:relative;margin:2.6rem 0 0;max-width:100%;aspect-ratio:16/9;overflow:hidden;background:#1a1622;user-select:none;touch-action:pan-y">
         <!-- derecha: MICROPOLÍTICAS (va debajo) -->
-        <video poster="micropoliticas.jpg" autoplay muted loop playsinline preload="auto" aria-label="Amado Villafaña en Nabusimake: memorias de una independencia" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="micropoliticas.mp4" type="video/mp4"><source src="micropoliticas.webm" type="video/webm"></video>
+        <video data-lado="der" poster="micropoliticas.jpg" autoplay muted loop playsinline preload="auto" aria-label="Amado Villafaña en Nabusimake: memorias de una independencia" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="micropoliticas.mp4" type="video/mp4"><source src="micropoliticas.webm" type="video/webm"></video>
         <!-- izquierda: METARRELATOS (va encima, se recorta según la línea) -->
-        <video poster="metarrelatos.jpg" autoplay muted loop playsinline preload="auto" aria-label="Pueblo arhuaco en 1958, archivo Señal Memoria" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);clip-path:inset(0 calc(100% - var(--pos)) 0 0)"><source src="metarrelatos.mp4" type="video/mp4"><source src="metarrelatos.webm" type="video/webm"></video>
+        <video data-lado="izq" poster="metarrelatos.jpg" autoplay muted loop playsinline preload="auto" aria-label="Pueblo arhuaco en 1958, archivo Señal Memoria" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);clip-path:inset(0 calc(100% - var(--pos)) 0 0)"><source src="metarrelatos.mp4" type="video/mp4"><source src="metarrelatos.webm" type="video/webm"></video>
         <figcaption style="position:absolute;left:0;top:0;max-width:46%;padding:clamp(.5rem,2vw,1rem) clamp(.6rem,2vw,1.1rem);line-height:1.3;font-size:clamp(.66rem,2.2vw,.95rem);color:#ece7df;background:linear-gradient(to bottom,rgba(0,0,0,.75),transparent);text-shadow:0 1px 2px #000">
           <span class="label" style="font-size:clamp(.52rem,1.6vw,.72rem);letter-spacing:.08em">Grandes metarrelatos</span><br>
           <span style="font-size:clamp(.66rem,2.2vw,.95rem)">Pueblo arhuaco en 1958 · Archivo Señal Memoria, RTVC</span>
@@ -126,6 +126,30 @@
         <input type="range" min="0" max="100" value="50" aria-label="Deslizar entre metarrelatos y micropolíticas"
                oninput="this.parentNode.style.setProperty('--pos', this.value + '%')"
                style="position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize">
+        <!-- botones de sonido: data-son="izq" = metarrelatos · data-son="der" = micropolíticas -->
+        <button type="button" data-son="izq" onclick="sonarLente(this)"
+                style="position:absolute;left:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
+        <button type="button" data-son="der" onclick="sonarLente(this)"
+                style="position:absolute;right:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
+        <script>
+        /* Enciende el sonido de un video del deslizador y silencia el otro. */
+        function sonarLente(boton){
+          var fig = boton.closest('figure.lente');
+          var elegido = fig.querySelector('video[data-lado="' + boton.dataset.son + '"]');
+          var encender = elegido.muted;
+          fig.querySelectorAll('video').forEach(function(v){ v.muted = true; });
+          elegido.muted = !encender;
+          elegido.volume = 1;
+          /* al quitar el silencio el navegador puede pausarlo: lo volvemos a arrancar */
+          fig.querySelectorAll('video').forEach(function(v){ var p = v.play(); if (p && p.catch) p.catch(function(){}); });
+          fig.querySelectorAll('button[data-son]').forEach(function(b){
+            var v = fig.querySelector('video[data-lado="' + b.dataset.son + '"]');
+            b.textContent = v.muted ? '♪ Escuchar' : '♪ Silenciar';
+          });
+        }
+        </script>
+      </figure>
+      <p class="label" style="margin-top:.7rem;opacity:.7">Desliza la línea: de la mirada desde afuera a la voz desde adentro</p>
         <!-- botones de sonido: data-v="0" = metarrelatos (izquierda), data-v="1" = micropolíticas (derecha) -->
         <button type="button" data-v="0" onclick="(function(b){var f=b.parentNode,vs=f.querySelectorAll('video'),v=vs[+b.dataset.v],s=v.muted;vs.forEach(function(x){x.muted=true});v.muted=!s;f.querySelectorAll('button[data-v]').forEach(function(x){x.textContent=vs[+x.dataset.v].muted?'♪ Escuchar':'♪ Silenciar'})})(this)"
                 style="position:absolute;left:.6rem;bottom:.6rem;z-index:3;font:inherit;font-family:var(--mono);font-size:clamp(.6rem,1.8vw,.8rem);padding:.35rem .7rem;border-radius:999px;border:1px solid var(--luz);background:rgba(12,11,16,.7);color:var(--luz);cursor:pointer">♪ Escuchar</button>
