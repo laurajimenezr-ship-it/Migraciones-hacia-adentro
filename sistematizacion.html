@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistematización · Migraciones hacia adentro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Dossier de matrices: ocho tablas y un registro fotográfico, en una columna ancha. */
+:root{
+  --papel:#FBFBF9; --bloque:#F1F1EC; --tinta:#121211; --gris:#6B6B66;
+  --linea:#DCDCD5; --marca:#C32A1C;
+  --display:"Archivo", Helvetica, Arial, sans-serif;
+  --cuerpo:"Spectral", Georgia, serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papel:#0E0E0D; --bloque:#1A1A18; --tinta:#EDEDE9; --gris:#9B9B95;
+    --linea:#2B2B28; --marca:#FF6E5C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#0E0E0D; --bloque:#1A1A18; --tinta:#EDEDE9; --gris:#9B9B95;
+  --linea:#2B2B28; --marca:#FF6E5C; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--papel); color:var(--tinta); font-family:var(--cuerpo); font-size:1rem; line-height:1.55}
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px 90px}
+.cinta{display:flex; flex-wrap:wrap; gap:6px 24px; padding:14px 0; border-bottom:1px solid var(--linea);
+  font-family:var(--display); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gris)}
+.cinta b{font-weight:600; color:var(--tinta)}
+header.port{padding:40px 0 28px; border-bottom:3px solid var(--tinta)}
+.kicker{font-family:var(--display); font-weight:600; font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--marca); margin:0 0 16px}
+h1{font-family:var(--display); font-weight:700; font-size:clamp(2.1rem,6vw,3.4rem); line-height:1; letter-spacing:-.025em; margin:0 0 16px; text-wrap:balance}
+.lead{font-size:1.05rem; color:var(--gris); max-width:62ch; margin:0}
+.cifras{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); border-bottom:1px solid var(--linea)}
+.cifra{padding:20px 16px; border-right:1px solid var(--linea)}
+.cifra:last-child{border-right:none}
+.cifra .n{font-family:var(--display); font-weight:700; font-size:2.1rem; line-height:1; color:var(--marca); font-variant-numeric:tabular-nums; display:block}
+.cifra .q{font-family:var(--display); font-size:.7rem; letter-spacing:.09em; text-transform:uppercase; color:var(--gris); margin-top:7px; display:block; line-height:1.35}
+nav.indice{padding:24px 0 8px; border-bottom:1px solid var(--linea); margin-bottom:8px}
+nav.indice h2{font-family:var(--display); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin:0 0 12px; font-weight:600}
+nav.indice ol{list-style:none; margin:0; padding:0; columns:2; column-gap:40px}
+nav.indice li{break-inside:avoid; margin-bottom:6px; font-family:var(--display); font-size:.9rem}
+nav.indice a{color:var(--tinta); text-decoration:none; display:flex; gap:10px; align-items:baseline}
+nav.indice a:hover .t, nav.indice a:focus .t{color:var(--marca); text-decoration:underline}
+nav.indice .k{color:var(--marca); font-weight:600; font-variant-numeric:tabular-nums; min-width:1.8em}
+section{padding:40px 0; border-bottom:1px solid var(--linea); scroll-margin-top:16px}
+.enc{display:flex; gap:16px; align-items:baseline; margin-bottom:6px}
+.enc .num{font-family:var(--display); font-weight:700; font-size:1.5rem; color:var(--marca); font-variant-numeric:tabular-nums}
+h2.tit{font-family:var(--display); font-weight:600; font-size:clamp(1.35rem,3vw,1.75rem); line-height:1.15; letter-spacing:-.015em; margin:0; text-wrap:balance}
+.sub{font-size:.95rem; color:var(--gris); margin:0 0 18px; max-width:76ch}
+.tw{overflow-x:auto; margin:0 0 16px; border-bottom:1px solid var(--linea)}
+table{border-collapse:collapse; width:100%; font-family:var(--display); font-size:.82rem; min-width:640px}
+th,td{text-align:left; padding:10px 14px 10px 0; border-bottom:1px solid var(--linea); vertical-align:top}
+th{border-bottom:1.5px solid var(--tinta); font-size:.67rem; letter-spacing:.09em; text-transform:uppercase; color:var(--gris); font-weight:600; white-space:nowrap}
+td:first-child{font-weight:600}
+td.alta{color:var(--marca); font-weight:600}
+.nota{font-size:.85rem; color:var(--gris); max-width:84ch; margin:0 0 10px}
+.nota b{color:var(--tinta)}
+.aviso{border-top:2px solid var(--marca); background:var(--bloque); padding:14px 18px; margin:14px 0 0; font-size:.88rem; max-width:84ch}
+.cuenta{display:flex; flex-wrap:wrap; gap:10px; margin:0 0 16px}
+.pill{font-family:var(--display); font-size:.78rem; border:1px solid var(--linea); padding:7px 12px; background:var(--bloque)}
+.pill b{color:var(--marca); font-variant-numeric:tabular-nums}
+.rejilla{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; margin:6px 0 16px}
+figure.cap{margin:0; display:flex; flex-direction:column; gap:7px}
+figure.cap button{padding:0; border:1px solid var(--linea); background:var(--bloque); cursor:pointer; display:block; width:100%; line-height:0}
+figure.cap button:hover, figure.cap button:focus-visible{border-color:var(--marca); outline:none}
+figure.cap img{width:100%; height:130px; object-fit:cover; display:block}
+figcaption{font-family:var(--display); font-size:.73rem; line-height:1.42; color:var(--gris)}
+figcaption .cod{display:block; color:var(--marca); font-weight:600; font-size:.67rem; letter-spacing:.08em; margin-bottom:2px}
+figcaption .rostro{display:inline-block; margin-top:4px; font-size:.65rem; letter-spacing:.06em; text-transform:uppercase; border:1px solid var(--linea); padding:1px 6px}
+figcaption .rostro.si{border-color:var(--marca); color:var(--marca)}
+#visor{position:fixed; inset:0; background:rgba(10,10,9,.94); display:none; padding:24px; z-index:50; flex-direction:column; align-items:center; justify-content:center; gap:14px}
+#visor.on{display:flex}
+#visor img{max-width:min(1200px,96vw); max-height:74vh; object-fit:contain; border:1px solid #333}
+#visor p{color:#EDEDE9; font-family:var(--display); font-size:.85rem; max-width:72ch; text-align:center; margin:0}
+#visor button.x{position:absolute; top:16px; right:20px; background:none; border:1px solid #666; color:#EDEDE9; font-family:var(--display); font-size:.78rem; padding:7px 13px; cursor:pointer; letter-spacing:.08em}
+#visor button.x:hover{border-color:var(--marca); color:var(--marca)}
+footer{padding:24px 0 0; font-family:var(--display); font-size:.8rem; color:var(--gris)}
+@media (max-width:620px){ nav.indice ol{columns:1} }
+@media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cinta">
+  <span><b>Laura Daniela Jiménez R.</b></span>
+  <span>Maestría en Humanidades Digitales · Uniandes</span>
+  <span>13 de noviembre de 2026</span>
+  <span><a href="index.html" style="color:var(--marca);text-decoration:none">← Volver al ensayo</a></span>
+</div>
+
+<header class="port">
+  <p class="kicker">Sistematización de experiencia</p>
+  <h1>Matriz de sistematización<br>Migraciones hacia adentro</h1>
+  <p class="lead">Ocho matrices sobre el ensayo digital de cine indígena: el proceso de construcción, los dos testeos con audiencias, el muro vivo, los dispositivos, los hallazgos, los pendientes y el registro fotográfico.</p>
+</header>
+
+<div class="cifras">
+  <div class="cifra"><span class="n">74</span><span class="q">cambios versionados</span></div>
+  <div class="cifra"><span class="n">7</span><span class="q">jornadas de trabajo</span></div>
+  <div class="cifra"><span class="n">2</span><span class="q">testeos con audiencias</span></div>
+  <div class="cifra"><span class="n">17</span><span class="q">reflexiones del muro</span></div>
+  <div class="cifra"><span class="n">54</span><span class="q">archivos de material</span></div>
+</div>
+
+<nav class="indice">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#m1"><span class="k">01</span><span class="t">Ficha del proyecto</span></a></li>
+    <li><a href="#m2"><span class="k">02</span><span class="t">Momentos</span></a></li>
+    <li><a href="#m3"><span class="k">03</span><span class="t">Testeos con audiencias</span></a></li>
+    <li><a href="#m4"><span class="k">04</span><span class="t">Muro vivo</span></a></li>
+    <li><a href="#m5"><span class="k">05</span><span class="t">Dispositivos</span></a></li>
+    <li><a href="#m6"><span class="k">06</span><span class="t">Hallazgos</span></a></li>
+    <li><a href="#m7"><span class="k">07</span><span class="t">Pendientes</span></a></li>
+    <li><a href="#m8"><span class="k">08</span><span class="t">Registro fotográfico</span></a></li>
+  </ol>
+</nav>
+
+<section id="m1">
+  <div class="enc"><span class="num">01</span><h2 class="tit">Ficha del proyecto</h2></div>
+  <p class="sub">Datos básicos del artefacto sistematizado.</p>
+  <div class="tw"><table>
+    <tr><th>Campo</th><th>Dato</th></tr>
+    <tr><td>Nombre</td><td>Migraciones hacia adentro</td></tr>
+    <tr><td>Tipo de artefacto</td><td>Ensayo digital de scroll, sitio estático publicado en GitHub Pages</td></tr>
+    <tr><td>Autora</td><td>Laura Daniela Jiménez R.</td></tr>
+    <tr><td>Objeto de estudio</td><td>Cine indígena contemporáneo en primera persona: Mileidy Orozco Domicó (Keratuma), emberá eyabida, y Luis Tróchez Tunubalá, misak</td></tr>
+    <tr><td>Pregunta que organiza</td><td>Qué significa filmar para volver a un lugar del que se tuvo que salir</td></tr>
+    <tr><td>Periodo documentado</td><td>7 de octubre a 13 de noviembre de 2026</td></tr>
+    <tr><td>Construcción</td><td>74 cambios versionados en 7 jornadas</td></tr>
+    <tr><td>Materiales</td><td>54 archivos, 95 MB: 6 cortos, 4 videos de deslizador, 17 fotografías, 5 audios</td></tr>
+    <tr><td>Estructura</td><td>7 estaciones: territorio, ciudad, formación, el yo, filmar, películas, muro vivo</td></tr>
+    <tr><td>Recepción registrada</td><td>17 reflexiones de 7 personas en el muro vivo; 2 sesiones de testeo presencial</td></tr>
+    <tr><td>Estado</td><td>Publicado y en uso; pendientes de autorizaciones y créditos</td></tr>
+  </table></div>
+</section>
+
+<section id="m2">
+  <div class="enc"><span class="num">02</span><h2 class="tit">Momentos</h2></div>
+  <p class="sub">Cada fila es una jornada verificable en el historial del repositorio.</p>
+  <div class="tw"><table>
+    <tr><th>Momento</th><th>Fecha</th><th>Qué se hizo</th><th>Evidencia</th><th>Aprendizaje</th></tr>
+    <tr><td>Montaje y publicación</td><td>7 oct</td><td>Primera carga de cuatro archivos y configuración de GitHub Pages. El sitio queda en línea el mismo día, cuatro minutos después</td><td>3 cambios</td><td>Publicar antes de tener contenido obligó a trabajar sobre algo visible desde el primer día</td></tr>
+    <tr><td>Carga de materiales</td><td>9 y 15 oct</td><td>Subida de fotogramas, audios y sonido de entrada; redacción del README</td><td>13 cambios</td><td>Subir audio sin comprimir dejó un archivo de 17 MB que todavía pesa en el repositorio</td></tr>
+    <tr><td>Exploraciones descartadas</td><td>14 oct</td><td>Desarrollo de dos piezas paralelas, tejido y canibal, que no llegaron al recorrido</td><td>6 cambios; archivos aún sin enlazar</td><td>Conservar lo descartado permite recuperar su contenido conceptual después</td></tr>
+    <tr><td>Jornada principal</td><td>21 oct</td><td>Títulos, citas, deslizador de lente con fotografías, hoja de contactos, fichas de películas, enlaces de video</td><td>33 cambios, el 45 % del proyecto</td><td>Las jornadas largas y concentradas permitieron probar y corregir dentro del mismo bloque</td></tr>
+    <tr><td>Galería y perfiles</td><td>23 y 24 oct</td><td>Galería deslizable de rodaje, perfiles biográficos narrados, cortos en la hoja de contactos</td><td>19 cambios</td><td>El límite de peso de la plataforma obligó a recomprimir los cortos y bajó su resolución</td></tr>
+    <tr><td>Deslizador en video</td><td>24 oct</td><td>El deslizador se rehace con video en lugar de fotografías, con sonido conmutable</td><td>Versiones mp4 y webm</td><td>Pasar de imagen fija a secuencia convirtió una comparación de encuadres en una de miradas</td></tr>
+    <tr><td>Testeo 1 · auditorio</td><td>Por confirmar</td><td>Recorrido del ensayo con una audiencia en auditorio y registro de sus preguntas y comentarios</td><td>Documento con 9 observaciones; fotografías F-01 a F-11</td><td>El acceso restringido a estas películas apareció como el problema de fondo</td></tr>
+    <tr><td>Testeo 2 · aula de pregrado</td><td>26 y 27 oct</td><td>Presentación del ensayo al curso Historia Digital y apertura del muro vivo</td><td>16 reflexiones; documento de percepciones; fotografías F-12 a F-14</td><td>El muro produjo enunciación en primera persona, no comentarios sobre el sitio</td></tr>
+    <tr><td>Retorno espontáneo</td><td>9 nov</td><td>Una reflexión nueva llega al muro dos semanas después de la sesión</td><td>Comentario fechado en el hilo de filmar</td><td>El artefacto siguió operando fuera del encuentro que lo presentó</td></tr>
+  </table></div>
+</section>
+
+<section id="m3">
+  <div class="enc"><span class="num">03</span><h2 class="tit">Testeos con audiencias</h2></div>
+  <p class="sub">Los dos encuentros presenciales, en el orden en que ocurrieron.</p>
+  <div class="tw"><table>
+    <tr><th>Rasgo</th><th>Testeo 1 · auditorio</th><th>Testeo 2 · aula de pregrado</th></tr>
+    <tr><td>Público</td><td>Audiencia de la sesión en auditorio</td><td>Estudiantes de Historia, curso Historia Digital, Universidad Nacional</td></tr>
+    <tr><td>Relación con el proyecto</td><td>No familiarizados previamente con el artefacto</td><td>No familiarizados previamente con el artefacto</td></tr>
+    <tr><td>Fecha</td><td>Por confirmar</td><td>26 y 27 de octubre, según los comentarios del muro</td></tr>
+    <tr><td>Instrumentos</td><td>Recorrido en sala y registro de preguntas y comentarios</td><td>Recorrido en sala, conversación abierta y muro vivo con cuatro preguntas</td></tr>
+    <tr><td>Registro producido</td><td>Documento con nueve observaciones y fotografías F-01 a F-11</td><td>16 reflexiones escritas, documento de percepciones y fotografías F-12 a F-14</td></tr>
+    <tr><td>Qué preguntaron</td><td>Cómo se hizo la investigación, en qué programa se construyó, cómo se estructuró el objeto digital</td><td>Procedencia de las imágenes, construcción del archivo audiovisual, relación entre memoria y narración, entre voz individual y pertenencia comunitaria</td></tr>
+    <tr><td>Qué valoraron</td><td>El marcador de tiempo entre película antigua y moderna; la interacción familiar e intuitiva de botones, menú y pestañas</td><td>El ensayo como puente entre las películas y sus públicos, sin mirada exotizante</td></tr>
+    <tr><td>Qué problematizaron</td><td>El sesgo social sobre qué producciones se consideran cine, y lo restringido del acceso a estas películas</td><td>El tránsito entre lenguajes: qué ocurre con las ideas de una investigación cuando se desplazan a otro medio</td></tr>
+    <tr><td>Efecto sobre el proyecto</td><td>Desplazó el énfasis hacia la divulgación: el artefacto como herramienta de promoción del cine indígena</td><td>Confirmó su dimensión curatorial: investigar, seleccionar y ensamblar para construir relaciones entre obras, contextos y audiencias</td></tr>
+  </table></div>
+  <p class="nota"><b>Observaciones del testeo 1, agrupadas.</b> Sobre la interfaz: gustó el marcador del tiempo entre la película antigua y la moderna; la interacción se percibió familiar e intuitiva; captaron la atención la separación inicial de los dos cineastas y el hilo conductor que luego une sus historias. Sobre la investigación: interés por cómo se realizó, en qué programa y con qué estructura, antes que por el contenido. Sobre el campo: una reflexión sobre la empatía, no son datos sino humanos que hacen parte del cine indígena; el señalamiento de que se piensa el cine y la televisión sin revisar estas producciones; el sesgo social sobre lo que se produce; y lo difícil y restringido del acceso a estas películas.</p>
+  <div class="aviso"><b>Dato por resolver.</b> El testeo 1 ocurrió antes que el testeo 2 según la numeración consecutiva de las fotografías, pero los comentarios del muro del testeo 2 están fechados el 26 y 27 de octubre, y la agenda proyectada en F-05 corresponde a la semana 13 del curso. Falta fijar la fecha del testeo 1.</div>
+</section>
+
+<section id="m4">
+  <div class="enc"><span class="num">04</span><h2 class="tit">Muro vivo</h2></div>
+  <p class="sub">Transcripción textual de las 17 reflexiones. Participantes codificados; la tabla de correspondencia se guarda aparte.</p>
+  <div class="cuenta">
+    <span class="pill">Lugar situado <b>4</b></span>
+    <span class="pill">Proyecto fílmico propio <b>5</b></span>
+    <span class="pill">Desplazamiento conceptual <b>5</b></span>
+    <span class="pill">Valoración del artefacto <b>3</b></span>
+  </div>
+  <div class="tw"><table>
+    <tr><th>N.º</th><th>Pregunta</th><th>Fecha</th><th>P.</th><th>Transcripción textual</th><th>Categoría</th></tr>
+    <tr><td>1</td><td>¿Qué lugar llevas contigo aunque ya no estés ahí?</td><td>27 oct</td><td>P1</td><td>El barrio y la casa donde crecí cuando era niño</td><td>Lugar situado</td></tr>
+    <tr><td>2</td><td>¿Qué lugar llevas contigo aunque ya no estés ahí?</td><td>27 oct</td><td>P2</td><td>Llevo una finca en la que dormí una vez. Refleja un sueño que busca verse reflejado en lo más profundo de mi ser pese a saber que quizá no lo pueda vivir.</td><td>Lugar situado</td></tr>
+    <tr><td>3</td><td>¿Qué lugar llevas contigo aunque ya no estés ahí?</td><td>27 oct</td><td>P3</td><td>La Palma, Cundinamarca, Vereda Murca. Mi familia se asentó ahí durante La Violencia, pasé la mayoría de mi adolescencia aquí o soñando con este lugar. Lo llevo conmigo todos los días.</td><td>Lugar situado</td></tr>
+    <tr><td>4</td><td>¿Qué lugar llevas contigo aunque ya no estés ahí?</td><td>27 oct</td><td>P4</td><td>La ciudad en la que me crié y crecí, las otras en las que han vivido mis padres durante mi estancia en Bogotá ya hace varios años. No solo llevo estos sitios sino sus calles, sus tradiciones, sus sabores y sus culturas.</td><td>Lugar situado</td></tr>
+    <tr><td>5</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P5</td><td>Las violencias estructurales que me atraviesas. Ya no como marcos de victimización y pesar, sino como lugar de lectura del mundo.</td><td>Desplazamiento conceptual</td></tr>
+    <tr><td>6</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P1</td><td>Siempre se piensa en el cine y la TV desde las grandes producciones gringas o europeas, muy pocas veces pensamos en las artes audiovisuales que se producen en nuestro país y en sus regiones.</td><td>Desplazamiento conceptual</td></tr>
+    <tr><td>7</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P2</td><td>Entender las dimensiones de una historia que nunca está completa en las vidas de la gente que te rodea que ves pasar.</td><td>Desplazamiento conceptual</td></tr>
+    <tr><td>8</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P6</td><td>Más que mirar diría que escuchar: lenguas, músicas, paisajes sonoros qué muchas veces son invisibles en la Urbe. Aprendí que en el territorio, en cada región hay muchos mundo posibles y todos, sin excepción han estado atravezados por el conflicto armado.</td><td>Desplazamiento conceptual</td></tr>
+    <tr><td>9</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P5</td><td>¡Este objeto digital es maravilloso! No solo permite acercarse a las discusiones sobre la representación en el cine documento y su papel frente al cine autobiográfico como lugar de microrepresentaciones Además, permite que el usuario explore piezas audiovisuales, citas y se acerce a representaciones propias y oficiales de lo que es ser indígena.</td><td>Valoración del artefacto</td></tr>
+    <tr><td>10</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P3</td><td>Entender el rol del cine, el arte y la cultura en la construcción del nosotros y del yo. Estos no deben ser elaborados en el exterior para imponer ideales de cultura y sociedad, sino forjados desde adentro y desde abajo hacia arriba.</td><td>Desplazamiento conceptual</td></tr>
+    <tr><td>11</td><td>¿Qué aprendiste a mirar de otra manera?</td><td>27 oct</td><td>P4</td><td>En un principio, en lo relativo a la forma, me llama particularmente la atención la manera en la que se puede presentar un ensayo en tiempos cada vez más digitales. En cuanto al contenido, la importancia de acercarse a los relatos y narraciones propias de quienes viven los sucesos históricos para reconstruir el pasado, aún más el de las personas que habitan territorios cercanos a nuestra propia experiencia.</td><td>Valoración del artefacto</td></tr>
+    <tr><td>12</td><td>¿Qué filmarías de tu propia historia?</td><td>27 oct</td><td>P1</td><td>Mis experiencias y anécdotas en la U</td><td>Proyecto fílmico propio</td></tr>
+    <tr><td>13</td><td>¿Qué filmarías de tu propia historia?</td><td>27 oct</td><td>P2</td><td>Mis orígenes como hijo de 2 lugares con los que crecí como persona, pero uno más en el que vine como producto saliente de una tierra de la que nunca creí estar conectado.</td><td>Proyecto fílmico propio</td></tr>
+    <tr><td>14</td><td>¿Qué filmarías de tu propia historia?</td><td>27 oct</td><td>P3</td><td>Los paisajes que he tenido la fortuna de apreciar.</td><td>Proyecto fílmico propio</td></tr>
+    <tr><td>15</td><td>¿Qué filmarías de tu propia historia?</td><td>27 oct</td><td>P4</td><td>Hubiese hecho un recorrido por los distintos lugares y experiencias que he habitado, una suerte de archivo personal filmográfico.</td><td>Proyecto fílmico propio</td></tr>
+    <tr><td>16</td><td>¿Qué filmarías de tu propia historia?</td><td>9 nov</td><td>P7</td><td>Hoy, más que nunca, filmaría a mi abuela y a mi padre, en su cotidianidad, en su quietud, en sus silencios. Ya lo dijo Luis Ospina hace mucho tiempo, «El cine es filmar a la muerte haciendo su trabajo», pero yo en este momento opino todo lo contrario, «el cine es filmar a la vida haciendo su trabajo» y buscando preservar esa vida y esa belleza filmarlos se convierte en el acto más sincero de amor. Filmar para cuidar y filmar para curarnos. Narrarnos a través de sus retratos para, tal vez, comprendernos, y lanzar sus imágenes en una botella, hasta el infinito.</td><td>Proyecto fílmico propio</td></tr>
+    <tr><td>17</td><td>Reflexión libre</td><td>27 oct</td><td>P5</td><td>¡Este objeto digital es maravilloso! No solo permite acercarse a las discusiones sobre la representación en el cine documento y su papel frente al cine autobiográfico como lugar de microrepresentaciones Además, permite que el usuario explore piezas audiovisuales, citas y se acerce a representaciones propias y oficiales de lo que es ser indígena. <i>(Duplica la intervención 9)</i></td><td>Valoración del artefacto</td></tr>
+  </table></div>
+  <div class="aviso">Transcripción literal: se conservan las erratas del original. Los participantes son estudiantes de la autora, que los evalúa; citarlos nominalmente exige autorización expresa de cada uno.</div>
+</section>
+
+<section id="m5">
+  <div class="enc"><span class="num">05</span><h2 class="tit">Dispositivos</h2></div>
+  <p class="sub">La última columna cruza lo que cada dispositivo buscaba con lo que dejó en los testeos.</p>
+  <div class="tw"><table>
+    <tr><th>Dispositivo</th><th>Qué buscaba</th><th>Costo</th><th>Qué dejó en los testeos</th></tr>
+    <tr><td>Deslizador de lente</td><td>Confrontar el registro arhuaco de 1958 con el cine propio contemporáneo</td><td>Alto: dos versiones, 14 MB de video, control de sonido</td><td>Mencionado expresamente como lo que más gustó del artefacto en el testeo 1</td></tr>
+    <tr><td>Puertas de los cineastas</td><td>Separar las dos trayectorias y luego unirlas</td><td>Medio: fichas, audios de perfil y voz</td><td>Señalado como el elemento que captó la atención por su hilo conductor</td></tr>
+    <tr><td>Timecode y estaciones</td><td>Situar al visitante dentro del recorrido con la convención del montaje</td><td>Bajo</td><td>Sin menciones en ninguno de los dos testeos</td></tr>
+    <tr><td>Diagrama relacional del yo</td><td>Mostrar los once conceptos que atraviesan la enunciación</td><td>Alto: generado en SVG desde datos</td><td>Sin menciones; es el dispositivo que más se rehízo y menos rastro dejó</td></tr>
+    <tr><td>Hoja de contactos con cortos</td><td>Dar acceso directo a fragmentos de las películas</td><td>Alto: recompresión de seis cortos, una reversión completa</td><td>Sin menciones directas, aunque sostiene la valoración del artefacto como vía de acceso</td></tr>
+    <tr><td>Galería de rodaje</td><td>Mostrar a los cineastas trabajando, no solo sus películas</td><td>Medio</td><td>Sin menciones; sus créditos siguen sin confirmar</td></tr>
+    <tr><td>Muro vivo</td><td>Abrir un espacio de respuesta dentro del propio ensayo</td><td>Bajo: cuatro preguntas sobre un sistema de comentarios existente</td><td>Produjo las 17 reflexiones: todo el material de recepción escrita del proyecto</td></tr>
+  </table></div>
+  <p class="nota"><b>Lectura.</b> Los dos dispositivos que la audiencia nombró sola, el deslizador y las puertas, son los que organizan el argumento, no los que añaden funciones. El muro vivo, el más barato, produjo el único registro escrito. El diagrama del yo, de los más costosos, no dejó huella.</p>
+</section>
+
+<section id="m6">
+  <div class="enc"><span class="num">06</span><h2 class="tit">Hallazgos</h2></div>
+  <p class="sub">Cada hallazgo con la evidencia que lo sostiene.</p>
+  <div class="tw"><table>
+    <tr><th>Hallazgo</th><th>Evidencia</th><th>Alcance</th></tr>
+    <tr><td>La interfaz produjo enunciación, no comentario</td><td>Ninguna de las 17 reflexiones del muro evalúa el sitio; todas responden desde una posición propia</td><td>Resultado central, verificable en registro público</td></tr>
+    <tr><td>El lector trae su propio interés y reescribe la pregunta</td><td>Una respuesta cambia «mirar» por «escuchar» y la firma alguien cuyo núcleo temático declarado era música y sonido</td><td>Señal más fuerte de apropiación registrada</td></tr>
+    <tr><td>Los dispositivos que argumentan pesan más que los que agregan funciones</td><td>El deslizador y las puertas fueron nombrados espontáneamente; el diagrama del yo no</td><td>Criterio de asignación de esfuerzo</td></tr>
+    <tr><td>El dispositivo más barato produjo todo el registro</td><td>Cuatro preguntas sobre un sistema de comentarios existente generaron las 17 reflexiones</td><td>Transferible a proyectos con recursos limitados</td></tr>
+    <tr><td>El artefacto fue leído como puerta de acceso, no como análisis</td><td>Los dos testeos valoraron su función de divulgación y promoción del cine indígena</td><td>Reorienta el propósito declarado</td></tr>
+    <tr><td>El acceso restringido a estas películas es el problema de fondo</td><td>La audiencia lo nombró como barrera; el proceso lo encontró como tres enlaces caídos en una jornada</td><td>Conviene incorporarlo al argumento del ensayo</td></tr>
+    <tr><td>Probar y revertir en la misma jornada resultó más eficiente que planear</td><td>La hoja de contactos fue reemplazada y restituida el mismo día; el deslizador se construyó dos veces</td><td>Método de trabajo, no accidente</td></tr>
+    <tr><td>Las restricciones de la plataforma condicionaron el contenido</td><td>Los cortos se recomprimieron de 1280 a 960 píxeles para poder publicarse</td><td>Limitación que debe declararse</td></tr>
+  </table></div>
+</section>
+
+<section id="m7">
+  <div class="enc"><span class="num">07</span><h2 class="tit">Pendientes</h2></div>
+  <p class="sub">Ordenados por prioridad.</p>
+  <div class="tw"><table>
+    <tr><th>Pendiente</th><th>Tipo</th><th>Qué implica</th><th>Prioridad</th></tr>
+    <tr><td>Autorizaciones de los realizadores y del Archivo Señal Memoria</td><td>Ético y legal</td><td>Condición previa a cualquier difusión fuera del ámbito académico</td><td class="alta">Alta</td></tr>
+    <tr><td>Consentimiento o anonimización de quienes escribieron en el muro</td><td>Ético</td><td>Son estudiantes de la autora, que los evalúa; la asimetría debe declararse</td><td class="alta">Alta</td></tr>
+    <tr><td>Autorización de uso de imagen de las fotografías</td><td>Ético y legal</td><td>Siete de las catorce muestran personas reconocibles</td><td class="alta">Alta</td></tr>
+    <tr><td>Créditos de las siete fotografías de rodaje</td><td>Documental</td><td>Los pies se redactaron sin confirmar autoría</td><td class="alta">Alta</td></tr>
+    <tr><td>Fecha del testeo 1</td><td>Documental</td><td>El orden quedó fijado, la fecha no</td><td>Media</td></tr>
+    <tr><td>Ficha completa del documental de 1958</td><td>Documental</td><td>Falta título y referencia del material que alimenta el deslizador</td><td>Media</td></tr>
+    <tr><td>Dos citas sin atribución resuelta</td><td>Documental</td><td>La de la sección V figura como «[Autor, año]» en el sitio publicado</td><td>Media</td></tr>
+    <tr><td>Medición de visitas</td><td>Metodológico</td><td>Sin denominador no se puede interpretar la participación del muro</td><td>Media</td></tr>
+    <tr><td>Devolución a quienes escribieron</td><td>Relacional</td><td>Las 17 reflexiones siguen sin respuesta; abrir un muro compromete a cerrarlo</td><td>Media</td></tr>
+    <tr><td>Depuración del repositorio</td><td>Técnico</td><td>Audio sin comprimir de 17 MB, videos duplicados, un archivo sin extensión, ocho fotogramas en desuso</td><td>Baja</td></tr>
+    <tr><td>Consigna propia para la pregunta libre del muro</td><td>Diseño</td><td>Recibió una sola intervención, que duplicaba otra respuesta</td><td>Baja</td></tr>
+  </table></div>
+</section>
+
+<section id="m8">
+  <div class="enc"><span class="num">08</span><h2 class="tit">Registro fotográfico</h2></div>
+  <p class="sub">Las dos sesiones se documentaron con catorce fotografías, en orden cronológico: once del testeo 1 y tres del testeo 2.</p>
+  <div class="aviso"><b>No se publican aquí.</b> Siete de las catorce muestran personas reconocibles. La imagen es dato personal, de modo que difundirlas exige autorización escrita de cada persona identificable. El registro completo, con su ficha de fecha, sesión y contenido, acompaña la versión de entrega de esta sistematización.</div>
+</section>
+
+<footer>
+  <p><a href="index.html">← Volver a «Migraciones hacia adentro»</a></p>
+  <p>Matriz construida sobre el historial del repositorio del proyecto, el muro vivo, los documentos de testeo y percepciones, y el registro fotográfico de las dos sesiones.</p>
+</footer>
+
+</div>
+
+
+</body>
+</html>
